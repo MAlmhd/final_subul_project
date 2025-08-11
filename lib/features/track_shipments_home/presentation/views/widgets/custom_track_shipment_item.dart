@@ -1,0 +1,110 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:final_subul_project/core/helpers/assets_data.dart';
+import 'package:final_subul_project/core/helpers/constants.dart';
+import 'package:final_subul_project/core/helpers/extensions.dart';
+import 'package:final_subul_project/core/helpers/styles.dart';
+import 'package:final_subul_project/core/routing/routes.dart';
+import 'package:final_subul_project/core/theming/app_colors.dart';
+import 'package:final_subul_project/features/track_shipments_home/domain/entities/approved_shipment_entity/approved_shipment_entity.dart';
+
+class CustomTrackShipmentItem extends StatelessWidget {
+  const CustomTrackShipmentItem({
+    super.key,
+    required this.approvedShipmentEntity,
+  });
+  final ApprovedShipmentEntity approvedShipmentEntity;
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: 290.w,
+      child: Row(
+        children: [
+          Container(
+            width: size.width / 1.5,
+            height: size.height / 11,
+            decoration: BoxDecoration(
+              color: AppColors.lightGray2,
+              borderRadius: BorderRadius.circular(cornerRadius),
+            ),
+            child: Row(
+              children: [
+                SizedBox(width: size.width / 45),
+                Row(
+                  children: [
+                    SvgPicture.asset(AssetsData.money, width: 8.w),
+                    SizedBox(width: size.width / 70),
+                    Text(
+                      approvedShipmentEntity.typeOfShipment,
+                      style: Styles.textStyle5Sp,
+                    ),
+                  ],
+                ),
+                SizedBox(width: size.width / 20),
+                Container(
+                  width: 30.w,
+                  height: 35.h,
+                  decoration: BoxDecoration(
+                    color: AppColors.green,
+                    borderRadius: BorderRadius.circular(cornerRadius),
+                  ),
+                  child: Center(
+                    child: Text(
+                      approvedShipmentEntity.statusOfShipment,
+                      style: Styles.textStyle4Sp,
+                    ),
+                  ),
+                ),
+                SizedBox(width: size.width / 10),
+                Text(
+                  approvedShipmentEntity.numberOfShipment.toString(),
+                  overflow: TextOverflow.visible,
+                  style: Styles.textStyle5Sp,
+                ),
+                SizedBox(width: size.width / 10),
+                Flexible(
+                  child: Text(
+                    approvedShipmentEntity.nameOfCustomer,
+                    style: Styles.textStyle5Sp,
+                    softWrap: true,
+                  ),
+                ),
+                SizedBox(width: size.width / 40),
+                Flexible(
+                  child: Text(
+                    approvedShipmentEntity.trackingString,
+                    softWrap: true,
+                    style: Styles.textStyle5Sp,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: size.width / 50),
+
+          TextButton(
+            onPressed: () {
+              context.pushNamed(
+                Routes.payTheBill,
+                arguments: approvedShipmentEntity,
+              );
+            },
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(AppColors.goldenYellow),
+            ),
+            child: Text(
+              'انشاء فاتورة',
+              style: Styles.textStyle4Sp.copyWith(color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,0 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:final_subul_project/features/home_view/presentation/views/widgets/build_animated_icons.dart';
+import 'package:final_subul_project/features/home_view/presentation/views/widgets/build_animated_welcome_text.dart';
+
+class Animations extends StatelessWidget {
+  const Animations({super.key});
+  // final int step;
+  // final double opacity;
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Column(
+      //  mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        BuildAnimatedWelcomeText(),
+        SizedBox(height: size.height / 12),
+        BuildAnimatedIcons(),
+      ],
+    );
+  }
+}

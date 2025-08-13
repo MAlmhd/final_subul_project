@@ -1,9 +1,7 @@
 class Data {
 	String? type;
 	String? customerId;
-	int? supplierId;
-	String? supplierName;
-	String? supplierNumber;
+	String? supplierId;
 	String? originCountryId;
 	String? destinationCountryId;
 	String? declaredParcelsCount;
@@ -20,8 +18,6 @@ class Data {
 		this.type, 
 		this.customerId, 
 		this.supplierId, 
-		this.supplierName, 
-		this.supplierNumber, 
 		this.originCountryId, 
 		this.destinationCountryId, 
 		this.declaredParcelsCount, 
@@ -37,9 +33,7 @@ class Data {
 factory Data.fromJson(Map<String, dynamic> json) => Data(
   type: json['type']?.toString(),
   customerId: json['customer_id']?.toString(),
-  supplierId: json['supplier_id'] as int?,
-  supplierName: json['supplier_name']?.toString(),
-  supplierNumber: json['supplier_number']?.toString(),
+  supplierId: json['supplier_id']?.toString(),
   originCountryId: json['origin_country_id']?.toString(),
   destinationCountryId: json['destination_country_id']?.toString(),
   declaredParcelsCount: json['declared_parcels_count']?.toString(),
@@ -50,18 +44,17 @@ factory Data.fromJson(Map<String, dynamic> json) => Data(
   isApproved: json['is_approved'] as bool?,
   updatedAt: json['updated_at'] == null
       ? null
-      : DateTime.parse(json['updated_at']),
+      : DateTime.parse(json['updated_at'].toString()),
   createdAt: json['created_at'] == null
       ? null
-      : DateTime.parse(json['created_at']),
+      : DateTime.parse(json['created_at'].toString()),
   id: json['id'] as int?,
 );
+
 	Map<String, dynamic> toJson() => {
 				'type': type,
 				'customer_id': customerId,
 				'supplier_id': supplierId,
-				'supplier_name': supplierName,
-				'supplier_number': supplierNumber,
 				'origin_country_id': originCountryId,
 				'destination_country_id': destinationCountryId,
 				'declared_parcels_count': declaredParcelsCount,

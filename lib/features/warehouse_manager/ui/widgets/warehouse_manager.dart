@@ -5,9 +5,11 @@ import 'package:final_subul_project/core/widgets/custom_icon_of_side_bar.dart';
 import 'package:final_subul_project/core/widgets/text_logo.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/create_shipment_use_case/create_shipment_use_case.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/get_countries_use_case/get_countries_use_case.dart';
+import 'package:final_subul_project/features/create_shipment/domain/use_case/get_suppliers_use_case/get_suppliers_use_case.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/get_users_use_case/get_user_use_case.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/manager/create_shipment_cubit/create_shipment_cubit.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/manager/get_countries_cubit/get_countries_cubit.dart';
+import 'package:final_subul_project/features/create_shipment/presentation/manager/get_suppliers_cubit/get_suppliers_cubit.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/manager/get_users_cubit/get_users_cubit.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/views/add_shipment_form.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/get_shipments_in_process_use_case/get_shipments_in_process_use_case.dart';
@@ -130,6 +132,7 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                                 sl.get<CreateShipmentUseCase>(),
                               ),
                         ),
+                        BlocProvider(create: (context) => GetSuppliersCubit(sl.get<GetSuppliersUseCase>()),)
                       ],
                       child: AddShipmentForm(),
                     ),

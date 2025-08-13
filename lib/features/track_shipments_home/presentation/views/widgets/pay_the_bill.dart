@@ -96,13 +96,14 @@ class _PayTheBillState extends State<PayTheBill> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+                if(widget.approvedShipmentEntity!.typeOfShipment =='ship_pay' || widget.approvedShipmentEntity!.typeOfShipment == 'pay_only')
                 Text(
                   'أدخل المبلغ',
                   style: Styles.textStyle6Sp,
                   overflow: TextOverflow.clip,
                   maxLines: 1,
                 ),
-
+                if(widget.approvedShipmentEntity!.typeOfShipment =='ship_pay' || widget.approvedShipmentEntity!.typeOfShipment == 'pay_only')
                 Container(
                   width: 70.w,
                   height: 45.h,
@@ -136,6 +137,7 @@ class _PayTheBillState extends State<PayTheBill> {
                     ),
                   ),
                 ),
+                if(widget.approvedShipmentEntity!.typeOfShipment =='ship_pay' || widget.approvedShipmentEntity!.typeOfShipment == 'pay_only')
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30.w),
                   child: Row(
@@ -248,17 +250,7 @@ class _PayTheBillState extends State<PayTheBill> {
 
                         return GestureDetector(
                           onTap: () {
-                            if (priceController.text.trim().isEmpty) {
-                              Fluttertoast.showToast(
-                                msg: 'ادخل السعر',
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                backgroundColor: Colors.black87,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                              return;
-                            }
+                            
 
                             if (date == null) {
                               Fluttertoast.showToast(
@@ -271,21 +263,11 @@ class _PayTheBillState extends State<PayTheBill> {
                               );
                               return;
                             }
-
+                           
                             double? priceDecimal = double.tryParse(
                               priceController.text,
                             );
-                            if (priceDecimal == null) {
-                              Fluttertoast.showToast(
-                                msg: 'السعر غير صالح',
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                backgroundColor: Colors.black87,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                              return;
-                            }
+                           
 
                             DateTime dateTime = DateTime.parse(date.toString());
                             String formattedDate =
@@ -296,7 +278,7 @@ class _PayTheBillState extends State<PayTheBill> {
                                   widget.approvedShipmentEntity!.idOfCustomer,
                               shipmentId:
                                   widget.approvedShipmentEntity!.idOfShipment,
-                              amount: priceDecimal,
+                              amount: priceDecimal ?? 0.0,
                               includesTax: false,
 
                               payableAt: formattedDate,

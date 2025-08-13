@@ -1,4 +1,6 @@
-part of 'get_shipment_parcels_cubit.dart';
+
+import 'package:equatable/equatable.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/entities/specific_parcels_of_shipment_entity/specific_parcels_of_shipment_entity.dart';
 
 sealed class GetShipmentParcelsState extends Equatable {
   const GetShipmentParcelsState();
@@ -18,7 +20,7 @@ final class GetShipmentParcelsFailure extends GetShipmentParcelsState {
 final class GetShipmentParcelsLoading extends GetShipmentParcelsState {}
 
 final class GetShipmentParcelsSuccess extends GetShipmentParcelsState {
-  final List<SpecificParcelsOfShipmentEntity> parcels;
+  final SpecificParcelsOfShipmentEntity parcels;
 
   const GetShipmentParcelsSuccess(this.parcels);
 }

@@ -10,15 +10,12 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
   final int id;
   final int shipmentId;
   final String actualWeight;
-  final String specialActualWeight;
-  final String normalActualWeight;
-  final String? specialDimensionalWeight;
-  final String? normalDimensionalWeight;
+
+ 
   final String length;
   final String width;
   final String height;
-  final String calculatedDimensionalWeight;
-  final String calculatedFinalWeight;
+
   final int customerId;
   final String firstName;
   final String lastName;
@@ -27,15 +24,11 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
     required this.id,
     required this.shipmentId,
     required this.actualWeight,
-    required this.specialActualWeight,
-    required this.normalActualWeight,
-    this.specialDimensionalWeight,
-    this.normalDimensionalWeight,
+   
     required this.length,
     required this.width,
     required this.height,
-    required this.calculatedDimensionalWeight,
-    required this.calculatedFinalWeight,
+    
     required this.customerId,
     required this.firstName,
     required this.lastName,
@@ -53,26 +46,8 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: 60.w,
-            child: Text(
-              calculatedDimensionalWeight,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(
-            width: 20.w,
-            child: Text(
-              calculatedFinalWeight,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+         
+         
           SizedBox(
             width: 20.w,
             child: Text(
@@ -103,46 +78,10 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          SizedBox(
-            width: 40.w,
-            child: Text(
-              normalDimensionalWeight.toString(),
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(
-            width: 40.w,
-            child: Text(
-              specialDimensionalWeight.toString(),
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(
-            width: 40.w,
-            child: Text(
-              normalActualWeight,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(
-            width: 40.w,
-            child: Text(
-              specialActualWeight,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          
+         
+         
+          
           SizedBox(
             width: 40.w,
             child: Text(
@@ -178,17 +117,12 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
             onSelected: (value) {
               if (value == 'view') {
                 context.pushNamed(Routes.showParcelItemsScreen, arguments: id);
-              } else if (value == 'create') {
-                context.pushNamed(Routes.createParcelItemScreen, arguments: id);
-              }
+              } 
             },
             itemBuilder:
                 (context) => [
                   PopupMenuItem(value: 'view', child: Text('عرض عناصر الطرد')),
-                  PopupMenuItem(
-                    value: 'create',
-                    child: Text('إنشاء عناصر للطرد'),
-                  ),
+                  
                 ],
           ),
         ],

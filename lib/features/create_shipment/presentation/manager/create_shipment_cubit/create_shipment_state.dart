@@ -18,7 +18,7 @@ final class CreateShipmentFailure extends CreateShipmentState {
 final class CreateShipmentLoading extends CreateShipmentState {}
 
 final class CreateShipmentSuccess extends CreateShipmentState {
-  final ResponseOfCreateShipmentEntity entity;
+  final CreateShipmentEntity entity;
 
   const CreateShipmentSuccess(this.entity);
 }

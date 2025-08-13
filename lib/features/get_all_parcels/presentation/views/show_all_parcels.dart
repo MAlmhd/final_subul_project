@@ -91,17 +91,11 @@ class ShowAllParcels extends StatelessWidget {
                                 id: parcels[index].id,
                                 shipmentId: parcels[index].shipmentId,
                                 actualWeight: parcels[index].actualWeight,
-                                specialActualWeight:
-                                    parcels[index].specialActualWeight,
-                                normalActualWeight:
-                                    parcels[index].normalActualWeight,
+                               
                                 length: parcels[index].length,
                                 width: parcels[index].width,
                                 height: parcels[index].height,
-                                calculatedDimensionalWeight:
-                                    parcels[index].calculatedDimensionalWeight,
-                                calculatedFinalWeight:
-                                    parcels[index].calculatedFinalWeight,
+                               
                                 customerId: parcels[index].customerId,
                                 firstName: parcels[index].firstName,
                                 lastName: parcels[index].lastName,

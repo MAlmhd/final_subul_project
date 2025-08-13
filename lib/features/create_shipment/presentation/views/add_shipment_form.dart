@@ -1,5 +1,5 @@
-import 'dart:developer';
-
+import 'package:final_subul_project/features/create_shipment/domain/entities/supplier_entity/supplier_entity.dart';
+import 'package:final_subul_project/features/create_shipment/presentation/manager/get_suppliers_cubit/get_suppliers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +7,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/helpers/styles.dart';
 import 'package:final_subul_project/core/theming/app_colors.dart';
-import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:final_subul_project/core/widgets/custom_input_field.dart';
 import 'package:final_subul_project/core/widgets/custom_progress_indicator.dart';
 import 'package:final_subul_project/features/create_shipment/domain/entities/country_entity/country_entity.dart';
@@ -32,21 +31,18 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
   CountryEntity? selectedOriginCountry;
   CountryEntity? selectedDestinitionCountry;
   List<CountryEntity> countries = [];
+  List<SupplierEntity> suppliers = [];
+  SupplierEntity? selectedSupplier;
   List<String> typeOfShipments = ['ship_pay', 'ship_only', 'pay_only'];
   String? selectedType;
   String? numberTracking;
 
-  final TextEditingController supplierNameController = TextEditingController();
-  final TextEditingController supplierNumberController =
-      TextEditingController();
   final TextEditingController declaredParcelsCountController =
       TextEditingController();
   final TextEditingController notesController = TextEditingController();
 
   @override
   void dispose() {
-    supplierNameController.dispose();
-    supplierNumberController.dispose();
     declaredParcelsCountController.dispose();
     notesController.dispose();
     super.dispose();
@@ -57,6 +53,7 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
     super.initState();
     context.read<GetUsersCubit>().getUser();
     context.read<GetCountriesCubit>().getCountries();
+    context.read<GetSuppliersCubit>().getSuppliers();
   }
 
   @override
@@ -151,30 +148,23 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
 
           SizedBox(height: size.height / 20),
 
-          CustomInputField(
-            controller: supplierNameController,
-            hintText: 'اسم المزود',
-            svgPicture: SvgPicture.asset(AssetsData.persons, height: 15.h),
-            validator:
-                (value) =>
-                    value == null || value.isEmpty
-                        ? 'يرجى إدخال اسم المزود'
-                        : null,
+          BlocBuilder<GetSuppliersCubit, GetSuppliersState>(
+            builder: (context, state) {
+              if (state is GetSuppliersSuccess) {
+                suppliers = state.suppliers;
+              }
+              return GenericDropdownField<SupplierEntity>(
+                items: suppliers,
+                selectedItem: selectedSupplier,
+                onChanged: (value) => setState(() => selectedSupplier = value),
+                itemAsString: (c) => c.supplierName,
+                hintText: 'المزود',
+                svgIcon: SvgPicture.asset(AssetsData.bulb, height: 20.h),
+                validator:
+                    (value) => value == null ? 'الرجاء اختيار المزود' : null,
+              );
+            },
           ),
-
-          SizedBox(height: size.height / 20),
-
-          CustomInputField(
-            controller: supplierNumberController,
-            hintText: 'رقم المزود',
-            svgPicture: SvgPicture.asset(AssetsData.phone, height: 15.h),
-            validator:
-                (value) =>
-                    value == null || value.isEmpty
-                        ? 'يرجى إدخال رقم المزود'
-                        : null,
-          ),
-
           SizedBox(height: size.height / 20),
 
           CustomInputField(
@@ -221,8 +211,6 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                   selectedType = null;
                 });
 
-                supplierNameController.clear();
-                supplierNumberController.clear();
                 declaredParcelsCountController.clear();
                 notesController.clear();
 
@@ -247,13 +235,13 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                       context.read<CreateShipmentCubit>().createShipment(
                         type: selectedType!,
                         customerId: selectedCustomer!.id,
-                        supplierName: supplierNameController.text,
-                        supplierNumber: supplierNumberController.text,
+
                         declaredParcelsCount:
                             declaredParcelsCountController.text,
                         notes: notesController.text,
                         destenationCountryId: selectedDestinitionCountry!.id,
                         originCountryId: selectedOriginCountry!.id,
+                        supplierId: selectedSupplier!.supplierId,
                       );
                     }
                   },

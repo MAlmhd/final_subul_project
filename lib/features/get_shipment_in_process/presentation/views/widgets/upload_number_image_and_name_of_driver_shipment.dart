@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:final_subul_project/core/helpers/extensions.dart';
+import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -103,7 +105,10 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                       textColor: Colors.white,
                       fontSize: 16.0,
                     );
-                    Navigator.pop(context);
+                    context.pushNamed(
+                          Routes.shipmentReceipt,
+                          arguments: widget.shipmentId,
+                        );
                   }
                 },
                 builder: (context, state) {
@@ -148,7 +153,7 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w,
+                                    horizontal: 4.w,
                                   ),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -168,11 +173,12 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                                       border: InputBorder.none,
                                       icon: SvgPicture.asset(
                                         AssetsData.personName,
+                                        
                                       ),
                                     ),
                                     hint: Text(
                                       'اسم السائق',
-                                      style: Styles.textStyle5Sp.copyWith(
+                                      style: Styles.textStyle3Sp.copyWith(
                                         color: Colors.grey,
                                         overflow: TextOverflow.ellipsis,
                                       ),

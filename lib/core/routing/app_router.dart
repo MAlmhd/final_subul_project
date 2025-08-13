@@ -1,3 +1,4 @@
+import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/views/widgets/update_parcel_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_subul_project/core/routing/routes.dart';
@@ -36,6 +37,7 @@ import 'package:final_subul_project/features/track_shipments_home/presentation/v
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/dimension_calculation.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/volumetric_weight_calculation.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/warehouse_manager.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
@@ -48,9 +50,16 @@ class AppRouter {
       case Routes.showAllParcels:
         return MaterialPageRoute(builder: (_) => ShowAllParcels());
       case Routes.showParcelsOfSpecificShipment:
-        final shipmentId = arguments as int;
+        final args = arguments as Map;
+        final int id = args["shipment_id"];
+        final int numberOfParcels = args["number_of_parcels"];
+
         return MaterialPageRoute(
-          builder: (_) => ShowParcelsOfSpecificShipment(shipmentId: shipmentId),
+          builder:
+              (_) => ShowParcelsOfSpecificShipment(
+                shipmentId: id,
+                numberOfParcels: numberOfParcels,
+              ),
         );
       case Routes.uploadNameAndNumberOfDriver:
         final id = arguments as int;
@@ -86,9 +95,17 @@ class AppRouter {
               ),
         );
       case Routes.createParcel:
-        final id = arguments as int;
+        final args = arguments as Map;
+        final id = args["id"] as int;
+        final numberOfParcels = args["numberOfParcels"] as int;
+        final numberOfCreatedParcels = args["numberOfCreatedParcels"] as int;
         return MaterialPageRoute(
-          builder: (context) => CreateParcel(shipmentId: id),
+          builder:
+              (context) => CreateParcel(
+                shipmentId: id,
+                numberOfParcels: numberOfParcels,
+                numberOfCreatedParcels: numberOfCreatedParcels,
+              ),
         );
       case Routes.volumetricWeightCalculation:
         return MaterialPageRoute(
@@ -97,7 +114,18 @@ class AppRouter {
       case Routes.dimensionCalculation:
         return MaterialPageRoute(builder: (context) => DimensionCalculation());
       case Routes.createParcelItemScreen:
-        final id = arguments as int;
+        final args = arguments as Map;
+        final id = args["id"] as int;
+        final length = args["length"] as num;
+        final width = args["width"] as num;
+        final height = args["height"] as num;
+        final brandType = args["brand_type"] as String;
+        final isFragile = args["is_fragile"] as bool;
+        final needsRepacking = args["needs_repacking"] as bool;
+        final notes = args["notes"] as String;
+        final actualWeight = args["actual_weight"] as num;
+        final scaledPhoto = args["scale_photo_upload"] as XFile;
+
         return MaterialPageRoute(
           builder:
               (context) => MultiBlocProvider(
@@ -115,9 +143,21 @@ class AppRouter {
                         )..getContents(),
                   ),
                 ],
-                child: CreateParcelItemScreen(id: id),
+                child: CreateParcelItemScreen(
+                  id: id,
+                  length: length,
+                  width: width,
+                  height: height,
+                  brandType: brandType,
+                  isFragile: isFragile,
+                  needsRepacking: needsRepacking,
+                  notes: notes,
+                  actualWeight: actualWeight,
+                  scaledPhoto: scaledPhoto,
+                ),
               ),
         );
+
       case Routes.showParcelItemsScreen:
         final id = arguments as int;
         return MaterialPageRoute(
@@ -172,6 +212,11 @@ class AppRouter {
       case Routes.detailsOfBill:
         final id = arguments as int;
         return MaterialPageRoute(builder: (context) => DetailsOfBill(id: id));
+      case Routes.updateParcelInfoScreen:
+        final int parcelId = arguments as int;
+        return MaterialPageRoute(
+          builder: (context) => UpdateParcelInfoScreen(parcelId: parcelId,),
+        );
       default:
         return null;
     }

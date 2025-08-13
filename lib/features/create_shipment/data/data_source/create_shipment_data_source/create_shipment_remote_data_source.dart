@@ -3,15 +3,14 @@ import 'dart:developer';
 import 'package:final_subul_project/core/data/auth_local_data_source.dart';
 import 'package:final_subul_project/core/utils/api_service.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
-import 'package:final_subul_project/features/create_shipment/data/models/response_of_create_shipment_model/response_of_create_shipment_model/response_of_create_shipment_model.dart';
-import 'package:final_subul_project/features/create_shipment/domain/entities/response_of_create_shipment_entity/response_of_create_shipment_entity.dart';
+import 'package:final_subul_project/features/create_shipment/data/models/create_shipment_model/create_shipment_model/create_shipment_model.dart';
+import 'package:final_subul_project/features/create_shipment/domain/entities/create_shipment_entity/create_shipment_entity.dart';
 
 abstract class CreateShipmentRemoteDataSource {
-  Future<ResponseOfCreateShipmentEntity> createShipment({
+  Future<CreateShipmentEntity> createShipment({
     required String type,
     required int customerId,
-    required String supplierName,
-    required String supplierNumber,
+    required int supplierId,
     required String declaredParcelsCount,
     required String notes,
     required int originCountryId,
@@ -25,11 +24,10 @@ class CreateShipmentRemoteDataSourceImpl
 
   CreateShipmentRemoteDataSourceImpl(this._apiService);
   @override
-  Future<ResponseOfCreateShipmentEntity> createShipment({
+  Future<CreateShipmentEntity> createShipment({
     required String type,
     required int customerId,
-    required String supplierName,
-    required String supplierNumber,
+  required int supplierId,
     required String declaredParcelsCount,
     required String notes,
     required int originCountryId,
@@ -41,8 +39,7 @@ class CreateShipmentRemoteDataSourceImpl
       data: {
         'type': type,
         'customer_id': customerId,
-        'supplier_name': supplierName,
-        'supplier_number': supplierNumber,
+        'supplier_id':supplierId,
         'declared_parcels_count': declaredParcelsCount,
         'notes': notes,
         'origin_country_id': originCountryId,
@@ -52,8 +49,8 @@ class CreateShipmentRemoteDataSourceImpl
     );
     log("$data");
 
-    ResponseOfCreateShipmentEntity entity =
-        ResponseOfCreateShipmentModel.fromJson(data);
+    CreateShipmentEntity entity =
+        CreateShipmentModel.fromJson(data);
 
     return entity;
   }

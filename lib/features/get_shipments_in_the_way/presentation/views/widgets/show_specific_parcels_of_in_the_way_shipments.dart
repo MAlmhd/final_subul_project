@@ -1,3 +1,4 @@
+import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_shipment_parcels_cubit/get_shipment_parcels_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,7 +77,7 @@ class ShowSpecificParcelsOfInTheWayShipments extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: size.height / 120),
-                  NameOfColumnsInShowAllShipmentsTable(),
+                //  NameOfColumnsInShowAllShipmentsTable(),
                   SizedBox(height: size.height / 30),
                   SizedBox(
                     height: 430.h,
@@ -93,35 +94,24 @@ class ShowSpecificParcelsOfInTheWayShipments extends StatelessWidget {
                       builder: (context, state) {
                         if (state is GetShipmentParcelsSuccess) {
                           return ListView.builder(
-                            itemCount: state.parcels.length,
+                            itemCount: state.parcels.parcels.length,
                             itemBuilder:
                                 (context, index) => Padding(
                                   padding: EdgeInsets.only(bottom: 25.h),
                                   child: CustomParcelOfInTheWayShipments(
-                                    id: state.parcels[index].id,
-                                    shipmentId: state.parcels[index].shipmentId,
+                                    id: state.parcels.parcels[index].id,
+                                    shipmentId: shipmentId,
                                     actualWeight:
-                                        state.parcels[index].actualWeight,
-                                    specialActualWeight:
-                                        state
-                                            .parcels[index]
-                                            .specialActualWeight,
-                                    normalActualWeight:
-                                        state.parcels[index].normalActualWeight,
-                                    length: state.parcels[index].length,
-                                    width: state.parcels[index].width,
-                                    height: state.parcels[index].height,
-                                    calculatedDimensionalWeight:
-                                        state
-                                            .parcels[index]
-                                            .calculatedDimensionalWeight,
-                                    calculatedFinalWeight:
-                                        state
-                                            .parcels[index]
-                                            .calculatedFinalWeight,
-                                    customerId: state.parcels[index].customerId,
-                                    firstName: state.parcels[index].firstName,
-                                    lastName: state.parcels[index].lastName,
+                                        state.parcels.parcels[index].actualWeight.toString(),
+                                    
+                                    length: state.parcels.parcels[index].length,
+                                    width: state.parcels.parcels[index].width,
+                                    height: state.parcels.parcels[index].height,
+                                    
+                                    
+                                    customerId: state.parcels.parcels[index].customerId,
+                                    firstName: state.parcels.parcels[index].firstName,
+                                    lastName: state.parcels.parcels[index].lastName,
                                   ),
                                 ),
                           );

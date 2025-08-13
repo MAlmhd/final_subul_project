@@ -37,7 +37,7 @@ class ShowShipmentsInProcessScreen extends StatelessWidget {
                           itemCount: state.shipments.length,
                           itemBuilder:
                               (context, index) => ShipmentInfoCard(
-                                shipment: state.shipments[index],
+                                shipment: state.shipments[index], 
                               ),
                         ),
                       ),

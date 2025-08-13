@@ -10,7 +10,7 @@ class GetShipmentParcelsRepoImpl extends GetShipmentParcelsRepo {
 
   GetShipmentParcelsRepoImpl(this.getShipmentParcelsRemoteDataSource);
   @override
-  Future<Either<Failure, List<SpecificParcelsOfShipmentEntity>>>
+  Future<Either<Failure, SpecificParcelsOfShipmentEntity>>
   getShipmentParcels({required int shipmentId}) async {
     try {
       var data = await getShipmentParcelsRemoteDataSource.getShipmentParcels(

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -137,7 +138,10 @@ class _UpdateShipmentsWarehouseArrivalScreenState
                       textColor: Colors.white,
                       fontSize: 16.0,
                     );
-                    context.pop();
+                     context.pushNamed(
+                            Routes.showSpecificParcelsOfInTheWayShipments,
+                            arguments: widget.id,
+                          );
                   }
                 },
               ),

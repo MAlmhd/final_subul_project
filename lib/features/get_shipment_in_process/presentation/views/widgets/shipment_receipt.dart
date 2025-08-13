@@ -1,3 +1,5 @@
+import 'package:final_subul_project/core/helpers/extensions.dart';
+import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +20,9 @@ class ShipmentReceipt extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: BlocConsumer<GetShipmentDetailsCubit, GetShipmentDetailsState>(

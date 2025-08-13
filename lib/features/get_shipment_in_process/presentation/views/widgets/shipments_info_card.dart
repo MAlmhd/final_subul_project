@@ -19,93 +19,100 @@ class ShipmentInfoCard extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.all(10.h),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            decoration: BoxDecoration(
-              color: AppColors.lightGray2,
-              borderRadius: BorderRadius.circular(cornerRadius),
-            ),
-            child: Row(
-              children: [
-                Expanded(flex: 3, child: _buildCell(shipment!.trackingNumber)),
-                Expanded(flex: 2, child: _buildCell(shipment!.originCountry)),
-                Expanded(
-                  flex: 2,
-                  child: _buildCell(shipment!.destinationCountry),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: _buildCell(shipment!.declaredParcelsCount.toString()),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: _buildCell(_formatDate(shipment!.dateOfShipment)),
-                ),
-                PopupMenuButton<String>(
-                  icon: Icon(Icons.more_vert, color: Colors.black87),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+          child: InkWell(
+            onTap: () {
+              context.pushNamed(
+                Routes.showParcelsOfSpecificShipment,
+                arguments: {
+                  "shipment_id": shipment!.id,
+                  "number_of_parcels": shipment!.declaredParcelsCount,
+                },
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                color: AppColors.lightGray2,
+                borderRadius: BorderRadius.circular(cornerRadius),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: _buildCell(shipment!.trackingNumber),
                   ),
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'details':
-                        context.pushNamed(
-                          Routes.shipmentReceipt,
-                          arguments: shipment!.id,
-                        );
-                        break;
+                  Expanded(flex: 2, child: _buildCell(shipment!.originCountry)),
+                  Expanded(
+                    flex: 2,
+                    child: _buildCell(shipment!.destinationCountry),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: _buildCell(
+                      shipment!.declaredParcelsCount.toString(),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: _buildCell(_formatDate(shipment!.dateOfShipment)),
+                  ),
+                  // PopupMenuButton<String>(
+                  //   icon: Icon(Icons.more_vert, color: Colors.black87),
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(12),
+                  //   ),
+                  //   onSelected: (value) {
+                  //     switch (value) {
+                  //       case 'details':
 
-                      case 'driver':
-                        context.pushNamed(
-                          Routes.uploadNameAndNumberOfDriver,
-                          arguments: shipment!.id,
-                        );
-                        break;
-                      case 'edit':
-                        context.pushNamed(
-                          Routes.editCountry,
-                          arguments: shipment!.id,
-                        );
-                        break;
-                      case 'parcels':
-                        context.pushNamed(
-                          Routes.showParcelsOfSpecificShipment,
-                          arguments: shipment!.id,
-                        );
-                        break;
-                      case 'create parcel':
-                        context.pushNamed(
-                          Routes.createParcel,
-                          arguments: shipment!.id,
-                        );
-                        break;
-                    }
-                  },
-                  itemBuilder:
-                      (context) => [
-                        PopupMenuItem(
-                          value: 'details',
-                          child: Text('عرض التفاصيل'),
-                        ),
-                        PopupMenuItem(
-                          value: 'driver',
-                          child: Text('تعيين سائق'),
-                        ),
-                        PopupMenuItem(
-                          value: 'edit',
-                          child: Text('تعديل الشحنة'),
-                        ),
-                        PopupMenuItem(
-                          value: 'parcels',
-                          child: Text('عرض الطرود'),
-                        ),
-                        PopupMenuItem(
-                          value: 'create parcel',
-                          child: Text('انشاء طرود'),
-                        ),
-                      ],
-                ),
-              ],
+                  //         break;
+
+                  //       case 'driver':
+
+                  //         break;
+                  //       case 'edit':
+                  //         context.pushNamed(
+                  //           Routes.editCountry,
+                  //           arguments: shipment!.id,
+                  //         );
+                  //         break;
+                  //       case 'parcels':
+
+                  //         break;
+                  //       case 'create parcel':
+                  //         context.pushNamed(
+                  //           Routes.createParcel,
+                  //           arguments: shipment!.id,
+                  //         );
+                  //         break;
+                  //     }
+                  //   },
+                  //   itemBuilder:
+                  //       (context) => [
+                  //         PopupMenuItem(
+                  //           value: 'details',
+                  //           child: Text('عرض التفاصيل'),
+                  //         ),
+                  //         PopupMenuItem(
+                  //           value: 'driver',
+                  //           child: Text('تعيين سائق'),
+                  //         ),
+                  //         PopupMenuItem(
+                  //           value: 'edit',
+                  //           child: Text('تعديل الشحنة'),
+                  //         ),
+                  //         PopupMenuItem(
+                  //           value: 'parcels',
+                  //           child: Text('عرض الطرود'),
+                  //         ),
+                  //         PopupMenuItem(
+                  //           value: 'create parcel',
+                  //           child: Text('انشاء طرود'),
+                  //         ),
+                  //       ],
+                  // ),
+                ],
+              ),
             ),
           ),
         ),

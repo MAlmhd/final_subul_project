@@ -1,4 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:final_subul_project/features/create_shipment/data/data_source/get_suppliers_data_source/get_suppliers_remote_data_source.dart';
+import 'package:final_subul_project/features/create_shipment/data/repos/get_suppliers_repo_impl/get_suppliers_repo_impl.dart';
+import 'package:final_subul_project/features/create_shipment/domain/repos/get_suppliers/get_suppliers_repo.dart';
+import 'package:final_subul_project/features/create_shipment/domain/use_case/get_suppliers_use_case/get_suppliers_use_case.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/data/data_source/create_multiple_parcels_data_source/create_multiple_parcels_remote_data_source.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/data/repos/create_multiple_parcels_repo_impl/create_multiple_parcels_repo_impl.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/repos/create_multiple_parcels_repo/create_multiple_parcels_repo.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/create_multiple_parcels_use_case/create_multiple_parcels_use_case.dart';
+import 'package:final_subul_project/features/get_shipments_in_the_way/data/data_source/update_parcel_info_data_source/update_parcel_info_remote_data_source.dart';
+import 'package:final_subul_project/features/get_shipments_in_the_way/data/repos/update_parcel_info_repo_impl/update_parcel_info_repo_impl.dart';
+import 'package:final_subul_project/features/get_shipments_in_the_way/domain/repos/update_parcel_info_repo/update_parcel_info_repo.dart';
+import 'package:final_subul_project/features/get_shipments_in_the_way/domain/use_case/update_parcel_info_use_case/update_parcel_info_use_case.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:final_subul_project/core/data/auth_local_data_source.dart';
@@ -589,5 +601,48 @@ void setupServiceLocator() {
 
   sl.registerLazySingleton<GetInvoiceUseCase>(
     () => GetInvoiceUseCase(getInvoicesRepo: sl.get<GetInvoicesRepo>()),
+  );
+
+
+  // get suppliers
+  sl.registerLazySingleton<GetSuppliersRemoteDataSource>(
+    () => GetSuppliersRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<GetSuppliersRepo>(
+    () => GetSuppliersRepoImpl(sl.get<GetSuppliersRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<GetSuppliersUseCase>(
+    () => GetSuppliersUseCase(sl.get<GetSuppliersRepo>()),
+  );
+
+
+  // create multiple parcels
+  sl.registerLazySingleton<CreateMultipleParcelsRemoteDataSource>(
+    () => CreateMultipleParcelsRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<CreateMultipleParcelsRepo>(
+    () => CreateMultipleParcelsRepoImpl(sl.get<CreateMultipleParcelsRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<CreateMultipleParcelsUseCase>(
+    () => CreateMultipleParcelsUseCase(sl.get<CreateMultipleParcelsRepo>()),
+  );
+
+
+
+    // update parcel info
+  sl.registerLazySingleton<UpdateParcelInfoRemoteDataSource>(
+    () => UpdateParcelInfoRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<UpdateParcelInfoRepo>(
+    () => UpdateParcelInfoRepoImpl(sl.get<UpdateParcelInfoRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<UpdateParcelInfoUseCase>(
+    () => UpdateParcelInfoUseCase(sl.get<UpdateParcelInfoRepo>()),
   );
 }

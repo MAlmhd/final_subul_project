@@ -21,10 +21,10 @@ class VolumetricWeightCalculation extends StatefulWidget {
 class _VolumetricWeightCalculationState
     extends State<VolumetricWeightCalculation> {
   int actualWeight = 0;
-  int specialActualWeight = 0;
-  int normalActualWeight = 0;
-  int specialDimensionalWeight = 0;
-  int normalDimensionalWeight = 0;
+  // int specialActualWeight = 0;
+  // int normalActualWeight = 0;
+  // int specialDimensionalWeight = 0;
+  // int normalDimensionalWeight = 0;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -66,28 +66,28 @@ class _VolumetricWeightCalculationState
                           label: 'الوزن الفعلي',
                           onChanged: (value) => actualWeight = value,
                         ),
-                        SizedBox(height: size.height / 30),
-                        LableledRemoveAddShipmentWidget(
-                          label: 'الفعلي الخاص',
-                          onChanged: (value) => specialActualWeight = value,
-                        ),
-                        SizedBox(height: size.height / 30),
-                        LableledRemoveAddShipmentWidget(
-                          label: 'الفعلي العادي',
-                          onChanged: (value) => normalActualWeight = value,
-                        ),
-                        SizedBox(height: size.height / 30),
-                        LableledRemoveAddShipmentWidget(
-                          label: 'الحجمي الخاص',
-                          onChanged:
-                              (value) => specialDimensionalWeight = value,
-                        ),
-                        SizedBox(height: size.height / 30),
-                        LableledRemoveAddShipmentWidget(
-                          label: 'الحجمي العادي',
-                          onChanged: (value) => normalDimensionalWeight = value,
-                        ),
-                        SizedBox(height: size.height / 30),
+                        // SizedBox(height: size.height / 30),
+                        // LableledRemoveAddShipmentWidget(
+                        //   label: 'الفعلي الخاص',
+                        //   onChanged: (value) => specialActualWeight = value,
+                        // ),
+                        // SizedBox(height: size.height / 30),
+                        // LableledRemoveAddShipmentWidget(
+                        //   label: 'الفعلي العادي',
+                        //   onChanged: (value) => normalActualWeight = value,
+                        // ),
+                        // SizedBox(height: size.height / 30),
+                        // LableledRemoveAddShipmentWidget(
+                        //   label: 'الحجمي الخاص',
+                        //   onChanged:
+                        //       (value) => specialDimensionalWeight = value,
+                        // ),
+                        // SizedBox(height: size.height / 30),
+                        // LableledRemoveAddShipmentWidget(
+                        //   label: 'الحجمي العادي',
+                        //   onChanged: (value) => normalDimensionalWeight = value,
+                        // ),
+                        // SizedBox(height: size.height / 30),
                         // Container(
                         //   width: 70.w,
                         //   height: 45.h,
@@ -133,12 +133,12 @@ class _VolumetricWeightCalculationState
                           onTap: () {
                             Navigator.pop(context, {
                               'actualWeight': actualWeight,
-                              'specialActualWeight': specialActualWeight,
-                              'normalActualWeight': normalActualWeight,
-                              'specialDimensionalWeight':
-                                  specialDimensionalWeight,
-                              'normalDimensionalWeight':
-                                  normalDimensionalWeight,
+                              // 'specialActualWeight': specialActualWeight,
+                              // 'normalActualWeight': normalActualWeight,
+                              // 'specialDimensionalWeight':
+                              //     specialDimensionalWeight,
+                              // 'normalDimensionalWeight':
+                              //     normalDimensionalWeight,
                             });
                           },
                           color: AppColors.goldenYellow,

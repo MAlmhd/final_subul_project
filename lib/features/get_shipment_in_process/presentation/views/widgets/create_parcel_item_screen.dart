@@ -1,3 +1,5 @@
+import 'package:final_subul_project/core/helpers/create_parcels_request.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/presentation/views/widgets/item_count_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,13 +13,36 @@ import 'package:final_subul_project/features/get_shipment_in_process/domain/enti
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/create_parcel_item_cubit/create_parcel_item_cubit.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_allowed_content_cubit/get_allowed_content_cubit.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/generic_dropdown_field.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../../core/theming/app_colors.dart';
 import '../../../../warehouse_manager/ui/widgets/labeled_icon_text_field.dart';
 
 class CreateParcelItemScreen extends StatefulWidget {
   final int id;
-  const CreateParcelItemScreen({super.key, required this.id});
+  final num length;
+  final num width;
+  final num height;
+  final num actualWeight;
+  final String brandType;
+  final bool isFragile;
+  final bool needsRepacking;
+  final String notes;
+  final XFile scaledPhoto;
+
+  const CreateParcelItemScreen({
+    super.key,
+    required this.id,
+    required this.length,
+    required this.width,
+    required this.height,
+    required this.brandType,
+    required this.isFragile,
+    required this.needsRepacking,
+    required this.notes,
+    required this.actualWeight,
+    required this.scaledPhoto,
+  });
 
   @override
   State<CreateParcelItemScreen> createState() => _CreateParcelItemScreenState();
@@ -29,6 +54,9 @@ class _CreateParcelItemScreenState extends State<CreateParcelItemScreen> {
   TextEditingController descriptionController = TextEditingController();
   String? selectedType;
   AllowedContentEntity? selctedAllowedContentEntity;
+
+  List<ParcelItemRequest> items = [];
+ 
 
   @override
   void dispose() {
@@ -88,55 +116,65 @@ class _CreateParcelItemScreenState extends State<CreateParcelItemScreen> {
               controller: descriptionController,
             ),
             SizedBox(height: 24.h),
-            BlocConsumer<CreateParcelItemCubit, CreateParcelItemState>(
-              listener: (context, state) {
-                if (state is CreateParcelItemFailure) {
-                  Fluttertoast.showToast(
-                    msg: state.message,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.black87,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
+            ItemCountBadge(count: items.length),
+            SizedBox(height: 16.h),
+            CustomOkButton(
+              onTap: () {
+                if (selectedType == null ||
+                    quantityController.text.isEmpty ||
+                    valuePerItemController.text.isEmpty ||
+                    descriptionController.text.isEmpty) {
+                  return;
                 }
-                if (state is CreateParcelItemSuccess) {
-                  Fluttertoast.showToast(
-                    msg: 'تمت العملية بنجاح',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.black87,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
-                  context.pop();
-                }
+
+                ParcelItemRequest parcel = ParcelItemRequest(
+                  itemType: selectedType!,
+                  quantity: int.parse(quantityController.text),
+                  valuePerItem: int.parse(valuePerItemController.text),
+                  description: descriptionController.text,
+                );
+
+                // context.read<CreateParcelItemCubit>().createParcelItem(
+                //   type: selectedType!,
+                //   quantity: int.parse(quantityController.text),
+                //   valuePerItem: int.parse(valuePerItemController.text),
+                //   description: descriptionController.text,
+                //   id: widget.id,
+                // );
+                setState(() {});
+                items.add(parcel);
               },
-              builder: (context, state) {
-                return state is CreateParcelItemLoading
-                    ? CustomProgressIndicator()
-                    : CustomOkButton(
-                      onTap: () {
-                        print(selectedType);
-                        if (selectedType == null ||
-                            quantityController.text.isEmpty ||
-                            valuePerItemController.text.isEmpty ||
-                            descriptionController.text.isEmpty) {
-                          return;
-                        }
-                        context.read<CreateParcelItemCubit>().createParcelItem(
-                          type: selectedType!,
-                          quantity: int.parse(quantityController.text),
-                          valuePerItem: int.parse(valuePerItemController.text),
-                          description: descriptionController.text,
-                          id: widget.id,
-                        );
-                      },
-                      color: AppColors.goldenYellow,
-                      label: 'حفظ',
-                    );
-              },
+              color: AppColors.goldenYellow,
+              label: 'إضافة عنصر',
             ),
+            SizedBox(height: 16.h),
+            CustomOkButton(
+  onTap: () {
+    if (items.isEmpty) {
+      // اختياري: نبه المستخدم يضيف عنصر واحد على الأقل
+      return;
+    }
+
+    final parcelRequest = ParcelRequest(
+      actualWeight: widget.actualWeight,
+                  length: widget.length,
+                  width: widget.width,
+                  height: widget.height,
+                  isFragile: widget.isFragile,
+                  needsRepacking: widget.needsRepacking,
+                  items: items,
+                  scaledPhoto: widget.scaledPhoto,
+                  brandType: widget.brandType,
+                  notes: widget.notes,
+    );
+
+    Navigator.pop(context, parcelRequest); // ارجاع النتيجة للشاشة الأولى
+  },
+  color: AppColors.deepPurple,
+  label: "حفظ",
+),
+
+
           ],
         ),
       ),

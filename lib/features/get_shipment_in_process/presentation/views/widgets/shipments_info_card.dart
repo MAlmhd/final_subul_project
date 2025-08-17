@@ -56,61 +56,7 @@ class ShipmentInfoCard extends StatelessWidget {
                     flex: 2,
                     child: _buildCell(_formatDate(shipment!.dateOfShipment)),
                   ),
-                  // PopupMenuButton<String>(
-                  //   icon: Icon(Icons.more_vert, color: Colors.black87),
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   onSelected: (value) {
-                  //     switch (value) {
-                  //       case 'details':
-
-                  //         break;
-
-                  //       case 'driver':
-
-                  //         break;
-                  //       case 'edit':
-                  //         context.pushNamed(
-                  //           Routes.editCountry,
-                  //           arguments: shipment!.id,
-                  //         );
-                  //         break;
-                  //       case 'parcels':
-
-                  //         break;
-                  //       case 'create parcel':
-                  //         context.pushNamed(
-                  //           Routes.createParcel,
-                  //           arguments: shipment!.id,
-                  //         );
-                  //         break;
-                  //     }
-                  //   },
-                  //   itemBuilder:
-                  //       (context) => [
-                  //         PopupMenuItem(
-                  //           value: 'details',
-                  //           child: Text('عرض التفاصيل'),
-                  //         ),
-                  //         PopupMenuItem(
-                  //           value: 'driver',
-                  //           child: Text('تعيين سائق'),
-                  //         ),
-                  //         PopupMenuItem(
-                  //           value: 'edit',
-                  //           child: Text('تعديل الشحنة'),
-                  //         ),
-                  //         PopupMenuItem(
-                  //           value: 'parcels',
-                  //           child: Text('عرض الطرود'),
-                  //         ),
-                  //         PopupMenuItem(
-                  //           value: 'create parcel',
-                  //           child: Text('انشاء طرود'),
-                  //         ),
-                  //       ],
-                  // ),
+                  
                 ],
               ),
             ),

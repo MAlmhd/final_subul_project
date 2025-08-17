@@ -17,5 +17,7 @@ static const String trackShipmentsHome = '/trackShipmentsHome';
   static const String payTheBill = '/bayBill';
   static const String detailsOfBill = '/detailsOfBill';
   static const String updateParcelInfoScreen = '/updateParcelInfoScreen';
+  static const String markShipmentDeliveredScreen = '/markShipmentDeliveredScreen';
+  static const String invoiceDetailsPage = '/invoiceDetailsPage';
   
 }

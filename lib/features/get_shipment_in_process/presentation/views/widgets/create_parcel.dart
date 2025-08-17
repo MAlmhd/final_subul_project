@@ -27,7 +27,7 @@ class CreateParcel extends StatefulWidget {
   const CreateParcel({
     super.key,
     required this.shipmentId,
-    required this.numberOfParcels,        // العدد المطلوب كليًا (Declared)
+    required this.numberOfParcels, // العدد المطلوب كليًا (Declared)
     required this.numberOfCreatedParcels, // العدد المنشأ مسبقًا (Created)
   });
 
@@ -43,13 +43,38 @@ class _CreateParcelState extends State<CreateParcel> {
   XFile? pickedImage;
   Uint8List? imageBytes;
 
+  void _resetDraft() {
+    // النصوص
+    brandController.clear();
+    notesController.clear();
+
+    // السويتشات
+    isFragile = true;
+    isNeedsRepacking = true;
+
+    // القيَم العددية
+    width = 0;
+    length = 0;
+    height = 0;
+    actualWeight = 0;
+
+    // الصورة
+    pickedImage = null;
+    imageBytes = null;
+
+    // (اختياري) إلغاء التركيز عن أي حقل
+    FocusScope.of(context).unfocus();
+  }
+
   // ========= الحساب الصحيح للمتبقي والتقدم =========
-  int get _targetTotal => widget.numberOfParcels;                 // المطلوب الكلي
-  int get _alreadyCreated => widget.numberOfCreatedParcels;       // الموجود مسبقًا
-  int get _inSession => parcels.length;                            // الذي أضفته الآن في هذه الشاشة
-  int get _remaining => (_targetTotal - _alreadyCreated - _inSession).clamp(0, _targetTotal);
+  int get _targetTotal => widget.numberOfParcels; // المطلوب الكلي
+  int get _alreadyCreated => widget.numberOfCreatedParcels; // الموجود مسبقًا
+  int get _inSession => parcels.length; // الذي أضفته الآن في هذه الشاشة
+  int get _remaining =>
+      (_targetTotal - _alreadyCreated - _inSession).clamp(0, _targetTotal);
   bool get _isLimitReached => _remaining == 0;
-  double get _progress => _targetTotal == 0 ? 0.0 : (_alreadyCreated + _inSession) / _targetTotal;
+  double get _progress =>
+      _targetTotal == 0 ? 0.0 : (_alreadyCreated + _inSession) / _targetTotal;
 
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
@@ -89,7 +114,10 @@ class _CreateParcelState extends State<CreateParcel> {
     var size = MediaQuery.of(context).size;
 
     return BlocProvider(
-      create: (context) => CreateMultipleParcelsCubit(sl.get<CreateMultipleParcelsUseCase>()),
+      create:
+          (context) => CreateMultipleParcelsCubit(
+            sl.get<CreateMultipleParcelsUseCase>(),
+          ),
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
@@ -101,7 +129,10 @@ class _CreateParcelState extends State<CreateParcel> {
                 end: Alignment.bottomCenter,
               ),
             ),
-            child: BlocConsumer<CreateMultipleParcelsCubit, CreateMultipleParcelsState>(
+            child: BlocConsumer<
+              CreateMultipleParcelsCubit,
+              CreateMultipleParcelsState
+            >(
               listener: (context, state) {
                 if (state is CreateMultipleParcelsFailure) {
                   Fluttertoast.showToast(
@@ -125,12 +156,14 @@ class _CreateParcelState extends State<CreateParcel> {
 
                   // (اختياري) أرسل إشارة للصفحة السابقة لعمل refresh
                   Navigator.pop(context, {'refresh': true});
-
                 }
               },
               builder: (context, state) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20.h,
+                    horizontal: 30.w,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -146,7 +179,8 @@ class _CreateParcelState extends State<CreateParcel> {
                                     child: Padding(
                                       padding: EdgeInsets.only(right: 10.w),
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           Text(
                                             'إنشاء طرد',
@@ -159,7 +193,9 @@ class _CreateParcelState extends State<CreateParcel> {
 
                                           // العلامة التجارية
                                           LabeledIconTextField(
-                                            svgPicture: SvgPicture.asset(AssetsData.aLetter),
+                                            svgPicture: SvgPicture.asset(
+                                              AssetsData.aLetter,
+                                            ),
                                             hintText: 'العلامة التجارية',
                                             controller: brandController,
                                           ),
@@ -171,15 +207,23 @@ class _CreateParcelState extends State<CreateParcel> {
                                             height: 50.h,
                                             decoration: BoxDecoration(
                                               color: AppColors.white,
-                                              borderRadius: BorderRadius.circular(cornerRadius),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    cornerRadius,
+                                                  ),
                                             ),
                                             child: CustomSwitchLabel(
                                               label: 'هش أم لا',
-                                              textColor: AppColors.black.withValues(alpha: 0.4),
-                                              activeColor: AppColors.goldenYellow,
+                                              textColor: AppColors.black
+                                                  .withValues(alpha: 0.4),
+                                              activeColor:
+                                                  AppColors.goldenYellow,
                                               disableColor: AppColors.grayDark,
                                               isActive: isFragile,
-                                              onChanged: (v) => setState(() => isFragile = v),
+                                              onChanged:
+                                                  (v) => setState(
+                                                    () => isFragile = v,
+                                                  ),
                                             ),
                                           ),
                                           SizedBox(height: size.height / 30),
@@ -188,22 +232,35 @@ class _CreateParcelState extends State<CreateParcel> {
                                             height: 50.h,
                                             decoration: BoxDecoration(
                                               color: AppColors.white,
-                                              borderRadius: BorderRadius.circular(cornerRadius),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    cornerRadius,
+                                                  ),
                                             ),
                                             child: CustomSwitchLabel(
-                                              label: 'بحاجة لإعادة التعبئة أم لا',
-                                              textColor: AppColors.black.withValues(alpha: 0.4),
-                                              activeColor: AppColors.goldenYellow,
+                                              label:
+                                                  'بحاجة لإعادة التعبئة أم لا',
+                                              textColor: AppColors.black
+                                                  .withValues(alpha: 0.4),
+                                              activeColor:
+                                                  AppColors.goldenYellow,
                                               disableColor: AppColors.grayDark,
                                               isActive: isNeedsRepacking,
-                                              onChanged: (v) => setState(() => isNeedsRepacking = v),
+                                              onChanged:
+                                                  (v) => setState(
+                                                    () => isNeedsRepacking = v,
+                                                  ),
                                             ),
                                           ),
 
                                           SizedBox(height: size.height / 30),
 
                                           // صورة الميزان
-                                          Text('رفع صورة الميزان:', style: Styles.textStyle5Sp, textDirection: TextDirection.rtl),
+                                          Text(
+                                            'رفع صورة الميزان:',
+                                            style: Styles.textStyle5Sp,
+                                            textDirection: TextDirection.rtl,
+                                          ),
                                           SizedBox(height: size.height / 30),
                                           MouseRegion(
                                             cursor: SystemMouseCursors.click,
@@ -214,20 +271,31 @@ class _CreateParcelState extends State<CreateParcel> {
                                                 height: 180.h,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
                                                 child: Center(
-                                                  child: imageBytes == null
-                                                      ? SvgPicture.asset(AssetsData.camera)
-                                                      : ClipRRect(
-                                                          borderRadius: BorderRadius.circular(12),
-                                                          child: Image.memory(
-                                                            imageBytes!,
-                                                            fit: BoxFit.cover,
-                                                            width: double.infinity,
-                                                            height: double.infinity,
+                                                  child:
+                                                      imageBytes == null
+                                                          ? SvgPicture.asset(
+                                                            AssetsData.camera,
+                                                          )
+                                                          : ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  12,
+                                                                ),
+                                                            child: Image.memory(
+                                                              imageBytes!,
+                                                              fit: BoxFit.cover,
+                                                              width:
+                                                                  double
+                                                                      .infinity,
+                                                              height:
+                                                                  double
+                                                                      .infinity,
+                                                            ),
                                                           ),
-                                                        ),
                                                 ),
                                               ),
                                             ),
@@ -239,23 +307,39 @@ class _CreateParcelState extends State<CreateParcel> {
                                           SizedBox(
                                             width: 110.w,
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 SizedBox(
                                                   width: 50.w,
                                                   child: CustomOkButton(
                                                     onTap: () async {
-                                                      final result = await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(builder: (_) => DimensionCalculation()),
-                                                      );
-                                                      if (result != null && result is Map<String, int>) {
-                                                        height = result['height']!;
-                                                        length = result['length']!;
-                                                        width  = result['width']!;
+                                                      final result =
+                                                          await Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (_) =>
+                                                                      DimensionCalculation(),
+                                                            ),
+                                                          );
+                                                      if (result != null &&
+                                                          result
+                                                              is Map<
+                                                                String,
+                                                                int
+                                                              >) {
+                                                        height =
+                                                            result['height']!;
+                                                        length =
+                                                            result['length']!;
+                                                        width =
+                                                            result['width']!;
                                                       }
                                                     },
-                                                    color: AppColors.goldenYellow,
+                                                    color:
+                                                        AppColors.goldenYellow,
                                                     label: 'حساب الأبعاد',
                                                   ),
                                                 ),
@@ -263,15 +347,28 @@ class _CreateParcelState extends State<CreateParcel> {
                                                   width: 50.w,
                                                   child: CustomOkButton(
                                                     onTap: () async {
-                                                      final result = await Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(builder: (_) => const VolumetricWeightCalculation()),
-                                                      );
-                                                      if (result != null && result is Map<String, dynamic>) {
-                                                        actualWeight = result['actualWeight'] ?? 0;
+                                                      final result =
+                                                          await Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (_) =>
+                                                                      const VolumetricWeightCalculation(),
+                                                            ),
+                                                          );
+                                                      if (result != null &&
+                                                          result
+                                                              is Map<
+                                                                String,
+                                                                dynamic
+                                                              >) {
+                                                        actualWeight =
+                                                            result['actualWeight'] ??
+                                                            0;
                                                       }
                                                     },
-                                                    color: AppColors.goldenYellow,
+                                                    color:
+                                                        AppColors.goldenYellow,
                                                     label: 'حساب الحجم',
                                                   ),
                                                 ),
@@ -282,35 +379,61 @@ class _CreateParcelState extends State<CreateParcel> {
                                           SizedBox(height: size.height / 30),
 
                                           // ملاحظات
-                                          CustomNote(label: 'ملاحظات عامة:', controller: notesController),
+                                          CustomNote(
+                                            label: 'ملاحظات عامة:',
+                                            controller: notesController,
+                                          ),
 
                                           SizedBox(height: size.height / 30),
 
                                           // كرت الحالة (المتبقي/التقدم)
                                           Container(
                                             width: 110.w,
-                                            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 8.h,
+                                              horizontal: 8.w,
+                                            ),
                                             decoration: BoxDecoration(
                                               color: AppColors.white,
-                                              borderRadius: BorderRadius.circular(cornerRadius),
-                                              boxShadow: [BoxShadow(blurRadius: 1, spreadRadius: 0.2, color: Colors.black12)],
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                    cornerRadius,
+                                                  ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 1,
+                                                  spreadRadius: 0.2,
+                                                  color: Colors.black12,
+                                                ),
+                                              ],
                                             ),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
                                               children: [
                                                 Text(
                                                   _isLimitReached
                                                       ? 'اكتمل العدد المطلوب ($_targetTotal)'
                                                       : 'المطلوب: $_targetTotal | المُنشأ: $_alreadyCreated | أضفته الآن: $_inSession | المتبقي: $_remaining',
                                                   textAlign: TextAlign.center,
-                                                  style: Styles.textStyle5Sp.copyWith(
-                                                    color: _isLimitReached ? Colors.redAccent : AppColors.deepPurple,
-                                                  ),
+                                                  style: Styles.textStyle5Sp
+                                                      .copyWith(
+                                                        color:
+                                                            _isLimitReached
+                                                                ? Colors
+                                                                    .redAccent
+                                                                : AppColors
+                                                                    .deepPurple,
+                                                      ),
                                                 ),
                                                 SizedBox(height: 6.h),
                                                 ClipRRect(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                  child: LinearProgressIndicator(value: _progress),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                        value: _progress,
+                                                      ),
                                                 ),
                                               ],
                                             ),
@@ -326,28 +449,46 @@ class _CreateParcelState extends State<CreateParcel> {
                                               child: CustomOkButton(
                                                 onTap: () async {
                                                   if (_isLimitReached) {
-                                                    Fluttertoast.showToast(msg: 'لا يوجد متبقٍ لإضافته');
+                                                    Fluttertoast.showToast(
+                                                      msg:
+                                                          'لا يوجد متبقٍ لإضافته',
+                                                    );
                                                     return;
                                                   }
-                                                  if (notesController.text.isEmpty ||
-                                                      brandController.text.isEmpty ||
+                                                  if (notesController
+                                                          .text
+                                                          .isEmpty ||
+                                                      brandController
+                                                          .text
+                                                          .isEmpty ||
                                                       pickedImage == null) {
                                                     Fluttertoast.showToast(
-                                                      msg: 'أدخل البيانات كاملة',
-                                                      toastLength: Toast.LENGTH_SHORT,
-                                                      gravity: ToastGravity.CENTER,
-                                                      backgroundColor: Colors.black87,
+                                                      msg:
+                                                          'أدخل البيانات كاملة',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      backgroundColor:
+                                                          Colors.black87,
                                                       textColor: Colors.white,
                                                       fontSize: 16.0,
                                                     );
                                                     return;
                                                   }
-                                                  if (height == 0 || length == 0 || width == 0 || actualWeight == 0) {
+                                                  if (height == 0 ||
+                                                      length == 0 ||
+                                                      width == 0 ||
+                                                      actualWeight == 0) {
                                                     Fluttertoast.showToast(
-                                                      msg: 'لا يجوز أن يكون هناك أبعاد/وزن صفري',
-                                                      toastLength: Toast.LENGTH_SHORT,
-                                                      gravity: ToastGravity.CENTER,
-                                                      backgroundColor: Colors.black87,
+                                                      msg:
+                                                          'لا يجوز أن يكون هناك أبعاد/وزن صفري',
+                                                      toastLength:
+                                                          Toast.LENGTH_SHORT,
+                                                      gravity:
+                                                          ToastGravity.CENTER,
+                                                      backgroundColor:
+                                                          Colors.black87,
                                                       textColor: Colors.white,
                                                       fontSize: 16.0,
                                                     );
@@ -355,34 +496,55 @@ class _CreateParcelState extends State<CreateParcel> {
                                                   }
 
                                                   // صفحة عناصر الطرد — تعيد ParcelRequest واحد
-                                                  final result = await Navigator.pushNamed(
-                                                    context,
-                                                    Routes.createParcelItemScreen,
-                                                    arguments: {
-                                                      "id": widget.shipmentId,
-                                                      "length": length,
-                                                      "width": width,
-                                                      "height": height,
-                                                      "brand_type": brandController.text,
-                                                      "is_fragile": isFragile,
-                                                      "needs_repacking": isNeedsRepacking,
-                                                      "notes": notesController.text,
-                                                      "actual_weight": actualWeight,
-                                                      "scale_photo_upload": pickedImage!,
-                                                    },
-                                                  );
+                                                  final result =
+                                                      await Navigator.pushNamed(
+                                                        context,
+                                                        Routes
+                                                            .createParcelItemScreen,
+                                                        arguments: {
+                                                          "id":
+                                                              widget.shipmentId,
+                                                          "length": length,
+                                                          "width": width,
+                                                          "height": height,
+                                                          "brand_type":
+                                                              brandController
+                                                                  .text,
+                                                          "is_fragile":
+                                                              isFragile,
+                                                          "needs_repacking":
+                                                              isNeedsRepacking,
+                                                          "notes":
+                                                              notesController
+                                                                  .text,
+                                                          "actual_weight":
+                                                              actualWeight,
+                                                          "scale_photo_upload":
+                                                              pickedImage!,
+                                                        },
+                                                      );
 
                                                   if (!mounted) return;
 
-                                                  if (result != null && result is ParcelRequest) {
+                                                  if (result != null &&
+                                                      result is ParcelRequest) {
                                                     // لا تسمح بتجاوز المتبقي (تحقّق إضافي)
                                                     if (_remaining <= 0) {
-                                                      Fluttertoast.showToast(msg: 'وصلت للحد المطلوب');
+                                                      Fluttertoast.showToast(
+                                                        msg:
+                                                            'وصلت للحد المطلوب',
+                                                      );
                                                       return;
                                                     }
-                                                    setState(() => parcels.add(result));
+                                                    setState(() {
+                                                      parcels.add(
+                                                        result,
+                                                      ); // نخزّن الطرد نهائيًا
+                                                      _resetDraft(); // نفرّغ الحقول لبدء طرد جديد
+                                                    });
                                                     Fluttertoast.showToast(
-                                                      msg: 'تمت إضافة طرد (عناصر: ${result.items.length}). المتبقي الآن: $_remaining',
+                                                      msg:
+                                                          'تمت إضافة طرد (عناصر: ${result.items.length}). المتبقي الآن: $_remaining',
                                                     );
                                                   }
                                                 },
@@ -398,26 +560,43 @@ class _CreateParcelState extends State<CreateParcel> {
                                           state is CreateMultipleParcelsLoading
                                               ? const CustomProgressIndicator()
                                               : Opacity(
-                                                  opacity: (_isLimitReached && parcels.isNotEmpty) ? 1 : (parcels.isNotEmpty ? 1 : 0.5),
-                                                  child: IgnorePointer(
-                                                    ignoring: parcels.length != widget.numberOfParcels,
-                                                    child: CustomOkButton(
-                                                      onTap: () {
-                                                        if (parcels.isEmpty) {
-                                                          Fluttertoast.showToast(msg: 'أضف طردًا واحدًا على الأقل');
-                                                          return;
-                                                        }
-                                                        // نُرسل فقط ما أُضيف في هذه الجلسة
-                                                        context.read<CreateMultipleParcelsCubit>().createMultipleParcels(
-                                                          shipmentId: widget.shipmentId,
-                                                          parcels: parcels,
+                                                opacity:
+                                                    (_isLimitReached &&
+                                                            parcels.isNotEmpty)
+                                                        ? 1
+                                                        : (parcels.isNotEmpty
+                                                            ? 1
+                                                            : 0.5),
+                                                child: IgnorePointer(
+                                                  ignoring:
+                                                      parcels.length !=
+                                                      widget.numberOfParcels,
+                                                  child: CustomOkButton(
+                                                    onTap: () {
+                                                      if (parcels.isEmpty) {
+                                                        Fluttertoast.showToast(
+                                                          msg:
+                                                              'أضف طردًا واحدًا على الأقل',
                                                         );
-                                                      },
-                                                      color: AppColors.deepPurple,
-                                                      label: "إنهاء الطلب",
-                                                    ),
+                                                        return;
+                                                      }
+                                                      // نُرسل فقط ما أُضيف في هذه الجلسة
+                                                      context
+                                                          .read<
+                                                            CreateMultipleParcelsCubit
+                                                          >()
+                                                          .createMultipleParcels(
+                                                            shipmentId:
+                                                                widget
+                                                                    .shipmentId,
+                                                            parcels: parcels,
+                                                          );
+                                                    },
+                                                    color: AppColors.deepPurple,
+                                                    label: "إنهاء الطلب",
                                                   ),
                                                 ),
+                                              ),
                                         ],
                                       ),
                                     ),

@@ -1,3 +1,9 @@
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/get_invoice_details_use_case/get_invoice_details_use_case.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/mark_shipment_delivered_use_case/mark_shipment_delivered_use_case.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/presentation/managers/get_invoice_details_cubit/get_invoice_details_cubit.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/presentation/managers/mark_shipment_delivered_cubit/mark_shipment_delivered_cubit.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/presentation/views/widgets/invoice_details_page.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/presentation/views/widgets/mark_shipment_delivered_screen.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/views/widgets/update_parcel_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -215,7 +221,31 @@ class AppRouter {
       case Routes.updateParcelInfoScreen:
         final int parcelId = arguments as int;
         return MaterialPageRoute(
-          builder: (context) => UpdateParcelInfoScreen(parcelId: parcelId,),
+          builder: (context) => UpdateParcelInfoScreen(parcelId: parcelId),
+        );
+      case Routes.markShipmentDeliveredScreen:
+        final int shipmentId = arguments as int;
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create:
+                    (context) => MarkShipmentDeliveredCubit(
+                      sl.get<MarkShipmentDeliveredUseCase>(),
+                    ),
+                child: MarkShipmentDeliveredScreen(id: shipmentId),
+              ),
+        );
+      case Routes.invoiceDetailsPage:
+        final shipmentId = arguments as int;
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create:
+                    (context) => GetInvoiceDetailsCubit(
+                      sl.get<GetInvoiceDetailsUseCase>(),
+                    ),
+                child: InvoiceDetailsPage(shipmentId: shipmentId),
+              ),
         );
       default:
         return null;

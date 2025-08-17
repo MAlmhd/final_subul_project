@@ -2,6 +2,7 @@ import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/theming/app_colors.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
 import 'package:final_subul_project/core/widgets/custom_icon_of_side_bar.dart';
+import 'package:final_subul_project/core/widgets/refetch_on_show.dart';
 import 'package:final_subul_project/core/widgets/text_logo.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/create_shipment_use_case/create_shipment_use_case.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/get_countries_use_case/get_countries_use_case.dart';
@@ -12,6 +13,9 @@ import 'package:final_subul_project/features/create_shipment/presentation/manage
 import 'package:final_subul_project/features/create_shipment/presentation/manager/get_suppliers_cubit/get_suppliers_cubit.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/manager/get_users_cubit/get_users_cubit.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/views/add_shipment_form.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/get_deliverable_shipments_use_case/get_deliverable_shipments_use_case.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/presentation/managers/get_deliverable_shipments_cubit/get_deliverable_shipments_cubit.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/presentation/views/show_deliverable_shipments_screen.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/get_shipments_in_process_use_case/get_shipments_in_process_use_case.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_shipments_in_process_cubit/get_shipment_in_proccess_cubit.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/views/show_shipments_in_process_screen.dart';
@@ -102,6 +106,14 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                               },
                               isSelected: selectedButtonIndex == 2,
                             ),
+                            SizedBox(height: size.height / 10),
+                            CustomIconOfSideBar(
+                              image: AssetsData.outlinePurpleBox,
+                              onTap: () {
+                                onButtonTap(3);
+                              },
+                              isSelected: selectedButtonIndex == 3,
+                            ),
                           ],
                         ),
                       ),
@@ -132,7 +144,12 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                                 sl.get<CreateShipmentUseCase>(),
                               ),
                         ),
-                        BlocProvider(create: (context) => GetSuppliersCubit(sl.get<GetSuppliersUseCase>()),)
+                        BlocProvider(
+                          create:
+                              (context) => GetSuppliersCubit(
+                                sl.get<GetSuppliersUseCase>(),
+                              ),
+                        ),
                       ],
                       child: AddShipmentForm(),
                     ),
@@ -143,7 +160,31 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                           )..getShipments(),
                       child: ShowShipmentsInProcessScreen(),
                     ),
-                    BlocProvider(create: (context) => GetShipmentsInTheWayCubit(sl.get<GetShipmentsInTheWayUseCase>())..getShipmentsInTheWay(),child: GetShipmentsInTheWayScreen(),),
+                    BlocProvider(
+                      create:
+                          (context) => GetShipmentsInTheWayCubit(
+                            sl.get<GetShipmentsInTheWayUseCase>(),
+                          )..getShipmentsInTheWay(),
+                      child: GetShipmentsInTheWayScreen(),
+                    ),
+                    BlocProvider(
+                      create:
+                          (context) => GetDeliverableShipmentsCubit(
+                            sl.get<GetDeliverableShipmentsUseCase>(),
+                          ),
+                      child: Builder(
+                        builder: (context) => RefetchOnShow(
+                          isVisible: selectedButtonIndex == 3,
+                          onShow:
+                              () =>
+                                  context
+                                      .read<GetDeliverableShipmentsCubit>()
+                                      .getDeliverableShipments(), // سمّها حسب دالتك
+                          child: const ShowDeliverableShipmentsScreen(),
+                        ),
+                      ),
+                    ),
+
                     // BlocProvider(
                     //   create:
                     //       (context) =>

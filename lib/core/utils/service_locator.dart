@@ -3,6 +3,18 @@ import 'package:final_subul_project/features/create_shipment/data/data_source/ge
 import 'package:final_subul_project/features/create_shipment/data/repos/get_suppliers_repo_impl/get_suppliers_repo_impl.dart';
 import 'package:final_subul_project/features/create_shipment/domain/repos/get_suppliers/get_suppliers_repo.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/get_suppliers_use_case/get_suppliers_use_case.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/data/data_source/get_deliverable_shipments_remote_data_source/get_deliverable_shipments_remote_data_source.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/data/data_source/get_invoice_details_remote_data_source/get_invoice_details_remote_data_source.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/data/data_source/mark_shipment_deliverable_remote_data_source/mark_shipment_delivered_remote_data_source.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/data/repos/get_deliverable_shipments_repo_impl/get_deliverable_shipments_repo_impl.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/data/repos/get_invoice_details_repo/get_invoice_details_repo_impl.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/data/repos/mark_shipment_delivered_repo_impl/mark_shipment_delivered_repo_impl.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/repos/get_deliverable_shipments_repo/get_deliverable_shipments_repo.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/repos/get_invoice_details_repo/get_invoice_details_repo.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/repos/mark_shipment_delivered_repo/mark_shipment_delivered_repo.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/get_deliverable_shipments_use_case/get_deliverable_shipments_use_case.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/get_invoice_details_use_case/get_invoice_details_use_case.dart';
+import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/mark_shipment_delivered_use_case/mark_shipment_delivered_use_case.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/data/data_source/create_multiple_parcels_data_source/create_multiple_parcels_remote_data_source.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/data/repos/create_multiple_parcels_repo_impl/create_multiple_parcels_repo_impl.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/domain/repos/create_multiple_parcels_repo/create_multiple_parcels_repo.dart';
@@ -645,4 +657,50 @@ void setupServiceLocator() {
   sl.registerLazySingleton<UpdateParcelInfoUseCase>(
     () => UpdateParcelInfoUseCase(sl.get<UpdateParcelInfoRepo>()),
   );
+
+
+   // get deliverable shipments
+  sl.registerLazySingleton<GetDeliverableShipmentsRemoteDataSource>(
+    () => GetDeliverableShipmentsRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<GetDeliverableShipmentsRepo>(
+    () => GetDeliverableShipmentsRepoImpl(sl.get<GetDeliverableShipmentsRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<GetDeliverableShipmentsUseCase>(
+    () => GetDeliverableShipmentsUseCase(sl.get<GetDeliverableShipmentsRepo>()),
+  );
+
+
+
+
+   // mark shipment delivered
+  sl.registerLazySingleton<MarkShipmentDeliveredRemoteDataSource>(
+    () => MarkShipmentDeliveredRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<MarkShipmentDeliveredRepo>(
+    () => MarkShipmentDeliveredRepoImpl(sl.get<MarkShipmentDeliveredRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<MarkShipmentDeliveredUseCase>(
+    () => MarkShipmentDeliveredUseCase(sl.get<MarkShipmentDeliveredRepo>()),
+  );
+
+
+ // get invoice details
+  sl.registerLazySingleton<GetInvoiceDetailsRemoteDataSource>(
+    () => GetInvoiceDetailsRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<GetInvoiceDetailsRepo>(
+    () => GetInvoiceDetailsRepoImpl(sl.get<GetInvoiceDetailsRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<GetInvoiceDetailsUseCase>(
+    () => GetInvoiceDetailsUseCase(sl.get<GetInvoiceDetailsRepo>()),
+  );
+
+
 }

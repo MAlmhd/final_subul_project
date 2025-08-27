@@ -62,7 +62,7 @@ class BillOfShippment extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              approvedShipmentEntity.statusOfShipment,
+                              approvedShipmentEntity.statusOfShipment ?? "Null",
                               style: Styles.textStyle5Sp,
                               overflow: TextOverflow.clip,
                               maxLines: 1,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:final_subul_project/core/data/auth_local_data_source.dart';
 import 'package:final_subul_project/core/utils/api_service.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
@@ -18,7 +20,8 @@ class GetInvoiceDetailsRemoteDataSourceImpl
     required int id,
   }) async {
     final token = await sl.get<AuthLocalDataSource>().getToken();
-
+    log("id : $id");
+    log("token : $token");
     var response = await _apiService.get(
       endPoint: 'get/invoice-details/$id',
       headers: {'Authorization': 'Bearer $token'},

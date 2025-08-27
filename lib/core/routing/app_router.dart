@@ -4,6 +4,9 @@ import 'package:final_subul_project/features/get_deliverable_shipments/presentat
 import 'package:final_subul_project/features/get_deliverable_shipments/presentation/managers/mark_shipment_delivered_cubit/mark_shipment_delivered_cubit.dart';
 import 'package:final_subul_project/features/get_deliverable_shipments/presentation/views/widgets/invoice_details_page.dart';
 import 'package:final_subul_project/features/get_deliverable_shipments/presentation/views/widgets/mark_shipment_delivered_screen.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/get_shipments_in_process_use_case/get_shipments_in_process_use_case.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_shipments_in_process_cubit/get_shipment_in_proccess_cubit.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/presentation/views/show_shipments_in_process_screen.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/views/widgets/update_parcel_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -247,6 +250,16 @@ class AppRouter {
                 child: InvoiceDetailsPage(shipmentId: shipmentId),
               ),
         );
+      case Routes.showShipmentsInProcessScreen:
+  return MaterialPageRoute(
+    builder: (context) => BlocProvider(
+      create: (context) => GetShipmentInProccessCubit(
+        sl.get<GetShipmentsInProcessUseCase>(), // عدّل اسم الـ use case الصحيح عندك
+      )..getShipments(),               // استدعاء الجلب الأولي إن لزم
+      child: const ShowShipmentsInProcessScreen(),
+    ),
+  );
+
       default:
         return null;
     }

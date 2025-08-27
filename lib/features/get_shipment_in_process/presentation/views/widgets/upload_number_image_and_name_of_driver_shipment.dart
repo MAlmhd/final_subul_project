@@ -2,11 +2,11 @@ import 'dart:typed_data';
 
 import 'package:final_subul_project/core/helpers/extensions.dart';
 import 'package:final_subul_project/core/routing/routes.dart';
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/helpers/constants.dart';
@@ -78,6 +78,9 @@ class _UploadNumberImageAndNameOfDriverShipmentState
         ),
       ],
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: true,
+        ),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
           child: Center(
@@ -88,23 +91,9 @@ class _UploadNumberImageAndNameOfDriverShipmentState
               >(
                 listener: (context, state) {
                   if (state is UpdateShipmentForDeliveryFailure) {
-                    Fluttertoast.showToast(
-                      msg: state.message,
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.black87,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
+                   showToastMsg(context, state.message);
                   } else if (state is UpdateShipmentForDeliverySuccess) {
-                    Fluttertoast.showToast(
-                      msg: 'تم تحديث الشحنة بنجاح',
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      backgroundColor: Colors.black87,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
+                   showToastMsg(context, "تم التحديث بنجاح");
                     context.pushNamed(
                           Routes.shipmentReceipt,
                           arguments: widget.shipmentId,
@@ -267,25 +256,11 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                                   return;
                                 }
                                 if (pickedImage == null) {
-                                  Fluttertoast.showToast(
-                                    msg: "أرفع صورة الشحنة",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    backgroundColor: Colors.black87,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
+                                  showToastMsg(context, "ارفع صورة الشحنة");
                                   return;
                                 }
                                 if (selectedIdDelivery == null) {
-                                  Fluttertoast.showToast(
-                                    msg: "اختر السائق",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    backgroundColor: Colors.black87,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0,
-                                  );
+                                  showToastMsg(context, "اختر السائق");
                                   return;
                                 }
                                 context

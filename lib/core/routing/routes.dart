@@ -19,5 +19,6 @@ static const String trackShipmentsHome = '/trackShipmentsHome';
   static const String updateParcelInfoScreen = '/updateParcelInfoScreen';
   static const String markShipmentDeliveredScreen = '/markShipmentDeliveredScreen';
   static const String invoiceDetailsPage = '/invoiceDetailsPage';
+  static const String showShipmentsInProcessScreen = '/showShipmentsInProcessScreen';
   
 }

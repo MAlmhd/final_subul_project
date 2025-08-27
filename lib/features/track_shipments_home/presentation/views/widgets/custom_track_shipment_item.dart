@@ -16,6 +16,7 @@ class CustomTrackShipmentItem extends StatelessWidget {
     required this.approvedShipmentEntity,
   });
   final ApprovedShipmentEntity approvedShipmentEntity;
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class CustomTrackShipmentItem extends StatelessWidget {
                     SvgPicture.asset(AssetsData.money, width: 8.w),
                     SizedBox(width: size.width / 70),
                     Text(
-                      approvedShipmentEntity.typeOfShipment,
+                      approvedShipmentEntity.typeOfShipment ,
                       style: Styles.textStyle5Sp,
                     ),
                   ],
@@ -49,12 +50,12 @@ class CustomTrackShipmentItem extends StatelessWidget {
                   width: 30.w,
                   height: 35.h,
                   decoration: BoxDecoration(
-                    color: AppColors.green,
+                    color: approvedShipmentEntity.statusOfShipment == null ? Colors.red : AppColors.green,
                     borderRadius: BorderRadius.circular(cornerRadius),
                   ),
                   child: Center(
                     child: Text(
-                      approvedShipmentEntity.statusOfShipment,
+                      approvedShipmentEntity.statusOfShipment ?? "Null",
                       style: Styles.textStyle4Sp,
                     ),
                   ),

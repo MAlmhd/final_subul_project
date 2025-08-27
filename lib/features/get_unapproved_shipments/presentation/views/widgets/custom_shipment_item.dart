@@ -49,12 +49,12 @@ class _CustomShipmentItemState extends State<CustomShipmentItem> {
                     width: 30.w,
                     height: 35.h,
                     decoration: BoxDecoration(
-                      color: AppColors.green,
+                      color: widget.unApprovedShipment.statusOfShipment == null ? Colors.red : AppColors.green ,
                       borderRadius: BorderRadius.circular(cornerRadius),
                     ),
                     child: Center(
                       child: Text(
-                        widget.unApprovedShipment.statusOfShipment,
+                        widget.unApprovedShipment.statusOfShipment ?? "",
                         style: Styles.textStyle4Sp,
                         textAlign: TextAlign.center,
                       ),

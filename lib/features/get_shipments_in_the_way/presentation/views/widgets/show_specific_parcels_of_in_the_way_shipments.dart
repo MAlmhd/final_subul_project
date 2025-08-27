@@ -1,3 +1,5 @@
+import 'package:final_subul_project/core/helpers/extensions.dart';
+import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_shipment_parcels_cubit/get_shipment_parcels_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +25,18 @@ class ShowSpecificParcelsOfInTheWayShipments extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(backgroundColor: AppColors.grey),
+      appBar: AppBar(
+        backgroundColor: AppColors.grey,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            context.pushNamedAndRemoveUntil(
+              Routes.warehouseManager,
+              predicate: (Route<dynamic> route) => false,
+            );
+          },
+        ),
+      ),
       body: BlocProvider(
         create:
             (context) =>
@@ -40,147 +53,147 @@ class ShowSpecificParcelsOfInTheWayShipments extends StatelessWidget {
                 end: Alignment.bottomCenter,
               ),
             ),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 30.h,
-                    ),
-                    child: SizedBox(
-                      width: 600.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 60.w,
-                            child: Text(
-                              'عرض جميع الطرود',
-                              style: Styles.textStyle7Sp.copyWith(
-                                color: AppColors.goldenYellow,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.clip,
-                            ),
-                          ),
-                          // CustomSearchItem(
-                          //   backgoundColor: AppColors.white,
-                          //   hintText: 'فلترة من خلال',
-                          //   icon: Icon(Icons.tune, color: AppColors.white),
-                          //   textColor: AppColors.black,
-                          // ),
-                        ],
-                      ),
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10.w,
+                    vertical: 30.h,
                   ),
-                  SizedBox(height: size.height / 120),
-                //  NameOfColumnsInShowAllShipmentsTable(),
-                  SizedBox(height: size.height / 30),
-                  SizedBox(
-                    height: 430.h,
+                  child: SizedBox(
                     width: 600.w,
-                    child: BlocConsumer<
-                      GetShipmentParcelsCubit,
-                      GetShipmentParcelsState
-                    >(
-                      listener: (context, state) {
-                        if (state is GetShipmentParcelsFailure) {
-                          showSnackBar(context, state.message, Colors.red);
-                        }
-                      },
-                      builder: (context, state) {
-                        if (state is GetShipmentParcelsSuccess) {
-                          return ListView.builder(
-                            itemCount: state.parcels.parcels.length,
-                            itemBuilder:
-                                (context, index) => Padding(
-                                  padding: EdgeInsets.only(bottom: 25.h),
-                                  child: CustomParcelOfInTheWayShipments(
-                                    id: state.parcels.parcels[index].id,
-                                    shipmentId: shipmentId,
-                                    actualWeight:
-                                        state.parcels.parcels[index].actualWeight.toString(),
-                                    
-                                    length: state.parcels.parcels[index].length,
-                                    width: state.parcels.parcels[index].width,
-                                    height: state.parcels.parcels[index].height,
-                                    
-                                    
-                                    customerId: state.parcels.parcels[index].customerId,
-                                    firstName: state.parcels.parcels[index].firstName,
-                                    lastName: state.parcels.parcels[index].lastName,
-                                  ),
-                                ),
-                          );
-                        } else if (state is GetShipmentParcelsLoading) {
-                          return CustomProgressIndicator();
-                        } else {
-                          return Container();
-                        }
-                      },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 60.w,
+                          child: Text(
+                            'عرض جميع الطرود',
+                            style: Styles.textStyle7Sp.copyWith(
+                              color: AppColors.goldenYellow,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                          ),
+                        ),
+                        // CustomSearchItem(
+                        //   backgoundColor: AppColors.white,
+                        //   hintText: 'فلترة من خلال',
+                        //   icon: Icon(Icons.tune, color: AppColors.white),
+                        //   textColor: AppColors.black,
+                        // ),
+                      ],
                     ),
                   ),
-                  // SizedBox(height: size.height / 50),
-                  // Padding(
-                  //   padding: EdgeInsets.only(right: 15.w),
-                  //   child: SizedBox(
-                  //     width: 40.w,
-                  //     child: Text(
-                  //       ':القيمة الإجمالية',
-                  //       textAlign: TextAlign.center,
-                  //       style: Styles.textStyle5Sp,
-                  //       maxLines: 1,
-                  //       overflow: TextOverflow.ellipsis,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(
-                  //     horizontal: 15.w,
-                  //     vertical: 20.h,
-                  //   ),
+                ),
+                SizedBox(height: size.height / 120),
+                //  NameOfColumnsInShowAllShipmentsTable(),
+                SizedBox(height: size.height / 30),
+                SizedBox(
+                  height: 430.h,
+                  width: 600.w,
+                  child: BlocConsumer<
+                    GetShipmentParcelsCubit,
+                    GetShipmentParcelsState
+                  >(
+                    listener: (context, state) {
+                      if (state is GetShipmentParcelsFailure) {
+                        showToastMsg(context, state.message);
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is GetShipmentParcelsSuccess) {
+                        return ListView.builder(
+                          itemCount: state.parcels.parcels.length,
+                          itemBuilder:
+                              (context, index) => Padding(
+                                padding: EdgeInsets.only(bottom: 25.h),
+                                child: CustomParcelOfInTheWayShipments(
+                                  id: state.parcels.parcels[index].id,
+                                  shipmentId: shipmentId,
+                                  actualWeight:
+                                      state.parcels.parcels[index].actualWeight
+                                          .toString(),
 
-                  //   child: SizedBox(
-                  //     width: 125.w,
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //       children: [
-                  //         Container(
-                  //           width: 40.w,
-                  //           height: 55.h,
-                  //           padding: EdgeInsets.symmetric(
-                  //             horizontal: 8.w,
-                  //             vertical: 10.h,
-                  //           ),
-                  //           decoration: BoxDecoration(
-                  //             color: AppColors.goldenYellow,
-                  //             borderRadius: BorderRadius.circular(cornerRadius),
-                  //           ),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text('إنشاء طرد', style: Styles.textStyle3Sp),
-                  //               Icon(Icons.add, color: AppColors.white),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //         Container(
-                  //           width: 80.w,
-                  //           height: 55.h,
-                  //           decoration: BoxDecoration(
-                  //             color: AppColors.goldenYellow,
-                  //             borderRadius: BorderRadius.circular(cornerRadius),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
+                                  length: state.parcels.parcels[index].length,
+                                  width: state.parcels.parcels[index].width,
+                                  height: state.parcels.parcels[index].height,
+
+                                  customerId:
+                                      state.parcels.parcels[index].customerId,
+                                  firstName:
+                                      state.parcels.parcels[index].firstName,
+                                  lastName:
+                                      state.parcels.parcels[index].lastName,
+                                ),
+                              ),
+                        );
+                      } else if (state is GetShipmentParcelsLoading) {
+                        return CustomProgressIndicator();
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
+                ),
+                // SizedBox(height: size.height / 50),
+                // Padding(
+                //   padding: EdgeInsets.only(right: 15.w),
+                //   child: SizedBox(
+                //     width: 40.w,
+                //     child: Text(
+                //       ':القيمة الإجمالية',
+                //       textAlign: TextAlign.center,
+                //       style: Styles.textStyle5Sp,
+                //       maxLines: 1,
+                //       overflow: TextOverflow.ellipsis,
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(
+                //     horizontal: 15.w,
+                //     vertical: 20.h,
+                //   ),
+
+                //   child: SizedBox(
+                //     width: 125.w,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         Container(
+                //           width: 40.w,
+                //           height: 55.h,
+                //           padding: EdgeInsets.symmetric(
+                //             horizontal: 8.w,
+                //             vertical: 10.h,
+                //           ),
+                //           decoration: BoxDecoration(
+                //             color: AppColors.goldenYellow,
+                //             borderRadius: BorderRadius.circular(cornerRadius),
+                //           ),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: [
+                //               Text('إنشاء طرد', style: Styles.textStyle3Sp),
+                //               Icon(Icons.add, color: AppColors.white),
+                //             ],
+                //           ),
+                //         ),
+                //         Container(
+                //           width: 80.w,
+                //           height: 55.h,
+                //           decoration: BoxDecoration(
+                //             color: AppColors.goldenYellow,
+                //             borderRadius: BorderRadius.circular(cornerRadius),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
           ),
         ),

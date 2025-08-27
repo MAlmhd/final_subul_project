@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:final_subul_project/core/helpers/constants.dart';
 import 'package:final_subul_project/core/helpers/styles.dart';
@@ -102,24 +103,10 @@ class _RegisterationClientState extends State<RegisterationClient> {
       child: BlocConsumer<RegisterClientCubit, RegisterClientState>(
         listener: (context, state) {
           if (state is RegisterClientFailure) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.black87,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
+            showToastMsg(context, state.message);
           }
           if (state is RegisterClientSuccess) {
-            Fluttertoast.showToast(
-              msg: state.registerClientEntity.message,
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              backgroundColor: Colors.black87,
-              textColor: Colors.white,
-              fontSize: 16.0,
-            );
+            showToastMsg(context, state.registerClientEntity.message,);
             clearForm();
           }
         },
@@ -233,38 +220,17 @@ class _RegisterationClientState extends State<RegisterationClient> {
                       }
 
                       if (profileImage == null) {
-                        Fluttertoast.showToast(
-                          msg: 'يرجى إدخال صورتك الشخصية',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.black87,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                         showToastMsg(context, "يرجى إدخال صورتك الشخصية");
                         return;
                       }
 
                       if (identityImage == null) {
-                        Fluttertoast.showToast(
-                          msg: 'يرجى إدخال صورة الهوية',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.black87,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                        showToastMsg(context, "يرجى إدخال صورتة الهوية");
                         return;
                       }
 
                       if (selectedCompanyId == null) {
-                        Fluttertoast.showToast(
-                          msg: 'يرجى اختيار الشركة',
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.black87,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                        showToastMsg(context, "يرجى اختيار الشركة");
                         return;
                       }
 

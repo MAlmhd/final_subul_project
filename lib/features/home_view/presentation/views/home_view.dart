@@ -110,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
                   SizedBox(height: size.height / 16),
                   SideBarButton(
                     onTap: () => onButtonTap(4),
-                    text: 'الغاء شحنة',
+                    text: 'طلبات الشحنات',
                     isSelected: selectedButtonIndex == 4,
                   ),
                   SizedBox(height: size.height / 16),

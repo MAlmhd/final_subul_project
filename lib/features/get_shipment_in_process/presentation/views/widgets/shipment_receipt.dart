@@ -21,20 +21,31 @@ class ShipmentReceipt extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.pushNamedAndRemoveUntil(
+                Routes.warehouseManager,
+                predicate: (Route<dynamic> route) => false,
+              );
+            },
+            child: Text('خروج', style: Styles.textStyle5Sp),
+          ),
+        ],
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: BlocConsumer<GetShipmentDetailsCubit, GetShipmentDetailsState>(
-            listener: (BuildContext context, GetShipmentDetailsState state) {
-              if (state is GetShipmentDetailsFailure) {
-                showSnackBar(context, state.message, Colors.red);
-              }
-            },
-            builder: (context, state) {
-              if (state is GetShipmentDetailsSuccess) {
-                return Container(
-                  width: 300.w,
+        child: BlocConsumer<GetShipmentDetailsCubit, GetShipmentDetailsState>(
+          listener: (BuildContext context, GetShipmentDetailsState state) {
+            if (state is GetShipmentDetailsFailure) {
+              showToastMsg(context, state.message);
+            }
+          },
+          builder: (context, state) {
+            if (state is GetShipmentDetailsSuccess) {
+              return SingleChildScrollView(
+                child: Container(
+                  width: 150.w,
+
                   decoration: BoxDecoration(
                     color: AppColors.lightGray2,
                     borderRadius: BorderRadius.circular(cornerRadius),
@@ -122,14 +133,14 @@ class ShipmentReceipt extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-              } else if (state is GetShipmentDetailsLoading) {
-                return CustomProgressIndicator();
-              } else {
-                return Container();
-              }
-            },
-          ),
+                ),
+              );
+            } else if (state is GetShipmentDetailsLoading) {
+              return CustomProgressIndicator();
+            } else {
+              return Container();
+            }
+          },
         ),
       ),
     );

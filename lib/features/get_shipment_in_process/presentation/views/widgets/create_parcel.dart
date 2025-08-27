@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:final_subul_project/core/helpers/create_parcels_request.dart';
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/create_multiple_parcels_use_case/create_multiple_parcels_use_case.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/create_multiple_parcels_cubit/create_multiple_parcels_cubit.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/labeled_icon_text_field.dart';
@@ -7,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/helpers/constants.dart';
@@ -119,6 +120,10 @@ class _CreateParcelState extends State<CreateParcel> {
             sl.get<CreateMultipleParcelsUseCase>(),
           ),
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.grey,
+          automaticallyImplyLeading: true,
+        ),
         body: SingleChildScrollView(
           child: Container(
             width: double.infinity,
@@ -135,24 +140,10 @@ class _CreateParcelState extends State<CreateParcel> {
             >(
               listener: (context, state) {
                 if (state is CreateMultipleParcelsFailure) {
-                  Fluttertoast.showToast(
-                    msg: state.message,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.black87,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
+                //  showToastMsg(context, state.message);
                 }
                 if (state is CreateMultipleParcelsSuccess) {
-                  Fluttertoast.showToast(
-                    msg: 'تم إنشاء الطرود بنجاح',
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    backgroundColor: Colors.black87,
-                    textColor: Colors.white,
-                    fontSize: 16.0,
-                  );
+                 // showToastMsg(context, "تم انشاء الطرود بنجاح");
 
                   // (اختياري) أرسل إشارة للصفحة السابقة لعمل refresh
                   Navigator.pop(context, {'refresh': true});
@@ -369,7 +360,7 @@ class _CreateParcelState extends State<CreateParcel> {
                                                     },
                                                     color:
                                                         AppColors.goldenYellow,
-                                                    label: 'حساب الحجم',
+                                                    label: 'حساب الوزن',
                                                   ),
                                                 ),
                                               ],
@@ -449,9 +440,9 @@ class _CreateParcelState extends State<CreateParcel> {
                                               child: CustomOkButton(
                                                 onTap: () async {
                                                   if (_isLimitReached) {
-                                                    Fluttertoast.showToast(
-                                                      msg:
-                                                          'لا يوجد متبقٍ لإضافته',
+                                                    showToastMsg(
+                                                      context,
+                                                      'لا يوجد متبقٍ لإضافته',
                                                     );
                                                     return;
                                                   }
@@ -462,35 +453,20 @@ class _CreateParcelState extends State<CreateParcel> {
                                                           .text
                                                           .isEmpty ||
                                                       pickedImage == null) {
-                                                    Fluttertoast.showToast(
-                                                      msg:
-                                                          'أدخل البيانات كاملة',
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.CENTER,
-                                                      backgroundColor:
-                                                          Colors.black87,
-                                                      textColor: Colors.white,
-                                                      fontSize: 16.0,
+                                                    showToastMsg(
+                                                      context,
+                                                      "ادخل البيانات كاملة",
                                                     );
                                                     return;
                                                   }
+                                                  
                                                   if (height == 0 ||
                                                       length == 0 ||
                                                       width == 0 ||
                                                       actualWeight == 0) {
-                                                    Fluttertoast.showToast(
-                                                      msg:
-                                                          'لا يجوز أن يكون هناك أبعاد/وزن صفري',
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.CENTER,
-                                                      backgroundColor:
-                                                          Colors.black87,
-                                                      textColor: Colors.white,
-                                                      fontSize: 16.0,
+                                                    showToastMsg(
+                                                      context,
+                                                      'لا يجوز أن يكون هناك أبعاد/وزن صفري',
                                                     );
                                                     return;
                                                   }
@@ -530,9 +506,9 @@ class _CreateParcelState extends State<CreateParcel> {
                                                       result is ParcelRequest) {
                                                     // لا تسمح بتجاوز المتبقي (تحقّق إضافي)
                                                     if (_remaining <= 0) {
-                                                      Fluttertoast.showToast(
-                                                        msg:
-                                                            'وصلت للحد المطلوب',
+                                                      showToastMsg(
+                                                        context,
+                                                        'وصلت للحد المطلوب',
                                                       );
                                                       return;
                                                     }
@@ -542,9 +518,9 @@ class _CreateParcelState extends State<CreateParcel> {
                                                       ); // نخزّن الطرد نهائيًا
                                                       _resetDraft(); // نفرّغ الحقول لبدء طرد جديد
                                                     });
-                                                    Fluttertoast.showToast(
-                                                      msg:
-                                                          'تمت إضافة طرد (عناصر: ${result.items.length}). المتبقي الآن: $_remaining',
+                                                    showToastMsg(
+                                                      context,
+                                                      'تمت إضافة طرد (عناصر: ${result.items.length}). المتبقي الآن: $_remaining',
                                                     );
                                                   }
                                                 },
@@ -574,9 +550,9 @@ class _CreateParcelState extends State<CreateParcel> {
                                                   child: CustomOkButton(
                                                     onTap: () {
                                                       if (parcels.isEmpty) {
-                                                        Fluttertoast.showToast(
-                                                          msg:
-                                                              'أضف طردًا واحدًا على الأقل',
+                                                        showToastMsg(
+                                                          context,
+                                                          'أضف طرداً واحداً على الأقل',
                                                         );
                                                         return;
                                                       }

@@ -130,7 +130,7 @@ class _SignInBodyState extends State<SignInBody> {
             // Navigate to another screen if needed
           } else if (state is SignInFailureState) {
            
-            showSnackBar(context,'فشل تسجيل الدخول: ${state.message}',Colors.red,);
+            showToastMsg(context,'فشل تسجيل الدخول: ${state.message}');
           }
         },
       ),

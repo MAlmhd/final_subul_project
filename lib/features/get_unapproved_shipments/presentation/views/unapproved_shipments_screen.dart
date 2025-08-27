@@ -1,8 +1,9 @@
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
 import 'package:final_subul_project/core/widgets/custom_progress_indicator.dart';
@@ -49,26 +50,12 @@ class UnApprovedShipmentsScreen extends StatelessWidget {
                 Navigator.pop(context);
               }
               if (state is ApproveShipmentSuccess) {
-                Fluttertoast.showToast(
-                  msg: "تمت الموافقة على الشحنة بنجاح",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  backgroundColor: Colors.black87,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
+               showToastMsg(context, "تم الموافقة على الشحنة بنجاح");
                 context
                     .read<GetUnapprovedShipmentsCubit>()
                     .getUnapprovedShipments();
               } else if (state is ApproveShipmentFailure) {
-                Fluttertoast.showToast(
-                  msg: state.message,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  backgroundColor: Colors.black87,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
+                showToastMsg(context, state.message);
               }
             },
           ),
@@ -79,26 +66,12 @@ class UnApprovedShipmentsScreen extends StatelessWidget {
                 Navigator.pop(context);
               }
               if (state is RejectShipmentSuccess) {
-                Fluttertoast.showToast(
-                  msg: 'تم رفض الشحنة',
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  backgroundColor: Colors.black87,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
+                 showToastMsg(context, "تم رفض الشحنة");
                 context
                     .read<GetUnapprovedShipmentsCubit>()
                     .getUnapprovedShipments();
               } else if (state is RejectShipmentFailure) {
-                Fluttertoast.showToast(
-                  msg: state.message,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  backgroundColor: Colors.black87,
-                  textColor: Colors.white,
-                  fontSize: 16.0,
-                );
+                 showToastMsg(context, state.message);
               }
             },
           ),
@@ -136,14 +109,7 @@ class UnApprovedShipmentsScreen extends StatelessWidget {
                   >(
                     listener: (context, state) {
                       if (state is GetUnapprovedShipmentsFailure) {
-                        Fluttertoast.showToast(
-                          msg: state.message,
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          backgroundColor: Colors.black87,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                         showToastMsg(context, state.message);
                       }
                     },
                     builder: (context, state) {

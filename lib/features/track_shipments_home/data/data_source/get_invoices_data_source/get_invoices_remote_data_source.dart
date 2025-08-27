@@ -6,7 +6,6 @@ import 'package:final_subul_project/core/utils/service_locator.dart';
 import 'package:final_subul_project/features/track_shipments_home/data/models/get_invoices_model/get_invoices_model.dart';
 import 'package:final_subul_project/features/track_shipments_home/domain/entities/get_ivoices_entity/get_invoices_entity.dart';
 
-
 abstract class GetInvoicesRemoteDataSource {
   Future<GetInvoicesEntity> getInvoices({required int id});
 }
@@ -18,7 +17,8 @@ class GetInvoicesRemoteDataSourceImpl implements GetInvoicesRemoteDataSource {
   @override
   Future<GetInvoicesEntity> getInvoices({required int id}) async {
     final token = await sl.get<AuthLocalDataSource>().getToken();
-
+    log("id : $id");
+    log("token : $token");
     var data = await _apiService.get(
       endPoint: 'get/invoice/$id',
       headers: {'Authorization': 'Bearer $token'},

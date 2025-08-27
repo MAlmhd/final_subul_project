@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  another_flushbar: ^1.12.30
   country_code_picker: ^3.3.0
   country_flags: ^3.3.0
   cupertino_icons: ^1.0.8
@@ -44,7 +45,6 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   flutter_svg: ^2.2.0
   flutter_switch: ^0.3.2
-  fluttertoast: ^8.2.12
   get_it: ^8.2.0
   google_fonts: ^6.3.0
   hive: ^2.2.3

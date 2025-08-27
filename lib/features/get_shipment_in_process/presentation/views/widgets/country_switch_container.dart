@@ -1,8 +1,9 @@
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/helpers/extensions.dart';
 import 'package:final_subul_project/core/helpers/styles.dart';
@@ -45,24 +46,10 @@ class _CountrySwitchContainerState extends State<CountrySwitchContainer> {
         >(
           listener: (context, state) {
             if (state is UpdateShipmentOriginCountryFailure) {
-              Fluttertoast.showToast(
-                msg: state.message,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.black87,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
+              showToastMsg(context, state.message);
             }
             if (state is UpdateShipmentOriginCountrySuccess) {
-              Fluttertoast.showToast(
-                msg: "تم التحديث بنجاح",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.black87,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
+              showToastMsg(context, "تم التحديث بنجاح");
             }
           },
         ),
@@ -72,24 +59,10 @@ class _CountrySwitchContainerState extends State<CountrySwitchContainer> {
         >(
           listener: (context, state) {
             if (state is UpdateShipmentDestenationCountryFailure) {
-              Fluttertoast.showToast(
-                msg: state.message,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.black87,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
+               showToastMsg(context, state.message);
             }
             if (state is UpdateShipmentDestenationCountrySuccess) {
-              Fluttertoast.showToast(
-                msg: "تم التحديث بنجاح",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.black87,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
+             showToastMsg(context, "تم التحديث بنجاح");
             }
             if (state is UpdateShipmentDestenationCountrySuccess ||
                 state is UpdateShipmentOriginCountrySuccess) {

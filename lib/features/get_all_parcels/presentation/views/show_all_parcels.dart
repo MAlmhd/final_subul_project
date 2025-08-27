@@ -71,7 +71,7 @@ class ShowAllParcels extends StatelessWidget {
                 child: BlocConsumer<GetAllParcelsCubit, GetAllParcelsState>(
                   listener: (context, state) {
                     if (state is GetAllParcelsFailure) {
-                      showSnackBar(context, state.message, Colors.red);
+                      showToastMsg(context, state.message);
                     }
                   },
                   builder: (context, state) {

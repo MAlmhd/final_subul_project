@@ -22,6 +22,7 @@ import 'package:final_subul_project/features/get_shipment_in_process/presentatio
 import 'package:final_subul_project/features/get_shipments_in_the_way/domain/use_case/get_shipments_in_the_way_use_case/get_shipments_in_the_way_use_case.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/manager/get_shipments_in_the_way_cubit/get_shipments_in_the_way_cubit.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/views/get_shipments_in_the_way_screen.dart';
+import 'package:final_subul_project/features/home_view/presentation/views/widgets/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,32 +46,31 @@ class _WarehouseManagerState extends State<WarehouseManager> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [AppColors.grey, AppColors.white],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColors.grey, AppColors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          child: Row(
-            children: [
-              Stack(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.w, top: 40.h),
-                        child: TextLogo(),
-                      ),
-                      SizedBox(height: size.height / 10),
-                      Container(
-                        width: 20.w,
-                        height: 900.h,
+        ),
+        child: Row(
+          children: [
+            Stack(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.w, top: 40.h),
+                      child: TextLogo(),
+                    ),
+                    SizedBox(height: size.height / 30),
+                    Expanded(
+                      child: Container(
+                      
                         decoration: BoxDecoration(
                           color: AppColors.goldenYellow,
                           borderRadius: BorderRadius.only(
@@ -79,134 +79,148 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                           ),
                         ),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
+                             SizedBox(height: 35.h),
                             CustomIconOfSideBar(
                               icon: Icons.add,
-                              color: AppColors.white,
-                              onTap: () {
-                                onButtonTap(0);
-                              },
-                              isSelected: selectedButtonIndex == 0,
-                            ),
-                            SizedBox(height: size.height / 10),
-                            CustomIconOfSideBar(
-                              icon: Icons.local_shipping,
                               color: AppColors.white,
                               onTap: () {
                                 onButtonTap(1);
                               },
                               isSelected: selectedButtonIndex == 1,
                             ),
-                            SizedBox(height: size.height / 10),
+                            SizedBox(height: 24.h),
                             CustomIconOfSideBar(
-                              image: AssetsData.boxShipmmentIcon,
+                              icon: Icons.local_shipping,
+                              color: AppColors.white,
                               onTap: () {
                                 onButtonTap(2);
                               },
                               isSelected: selectedButtonIndex == 2,
                             ),
-                            SizedBox(height: size.height / 10),
+                            SizedBox(height: 24.h),
                             CustomIconOfSideBar(
-                              image: AssetsData.outlinePurpleBox,
+                              image: AssetsData.boxShipmmentIcon,
                               onTap: () {
                                 onButtonTap(3);
                               },
                               isSelected: selectedButtonIndex == 3,
                             ),
+                            SizedBox(height: 24.h),
+                            CustomIconOfSideBar(
+                              image: AssetsData.outlinePurpleBox,
+                              onTap: () {
+                                onButtonTap(4);
+                              },
+                              isSelected: selectedButtonIndex == 4,
+                            ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              Expanded(
-                child: IndexedStack(
-                  index: selectedButtonIndex,
-                  children: [
-                    MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create:
-                              (context) =>
-                                  GetUsersCubit(sl.get<GetUserUseCase>()),
-                        ),
-                        BlocProvider(
-                          create:
-                              (context) => GetCountriesCubit(
-                                sl.get<GetCountriesUseCase>(),
-                              ),
-                        ),
-                        BlocProvider(
-                          create:
-                              (context) => CreateShipmentCubit(
-                                sl.get<CreateShipmentUseCase>(),
-                              ),
-                        ),
-                        BlocProvider(
-                          create:
-                              (context) => GetSuppliersCubit(
-                                sl.get<GetSuppliersUseCase>(),
-                              ),
-                        ),
-                      ],
-                      child: AddShipmentForm(),
                     ),
-                    BlocProvider(
-                      create:
-                          (context) => GetShipmentInProccessCubit(
-                            sl.get<GetShipmentsInProcessUseCase>(),
-                          )..getShipments(),
-                      child: ShowShipmentsInProcessScreen(),
-                    ),
-                    BlocProvider(
-                      create:
-                          (context) => GetShipmentsInTheWayCubit(
-                            sl.get<GetShipmentsInTheWayUseCase>(),
-                          )..getShipmentsInTheWay(),
-                      child: GetShipmentsInTheWayScreen(),
-                    ),
-                    BlocProvider(
-                      create:
-                          (context) => GetDeliverableShipmentsCubit(
-                            sl.get<GetDeliverableShipmentsUseCase>(),
-                          ),
-                      child: Builder(
-                        builder: (context) => RefetchOnShow(
-                          isVisible: selectedButtonIndex == 3,
-                          onShow:
-                              () =>
-                                  context
-                                      .read<GetDeliverableShipmentsCubit>()
-                                      .getDeliverableShipments(), // سمّها حسب دالتك
-                          child: const ShowDeliverableShipmentsScreen(),
-                        ),
-                      ),
-                    ),
-
-                    // BlocProvider(
-                    //   create:
-                    //       (context) =>
-                    //           GetAllParcelsCubit(sl.get<GetAllParcelsUseCase>())
-                    //             ..getAllParcels(),
-                    //   child: ShowAllParcels(),
-                    // ),
-                    // EditReceivingShipmentsTable(
-                    //   widget: CustomOkButton(
-                    //     onTap: () {},
-                    //     color: AppColors.goldenYellow,
-                    //     label: 'تعديل',
-                    //   ),
-                    // ),
-                    // EditShippingDetail(),
-                    //  LogisticsEntryScreen(),
-                    // SubulReceiptScreen(),
                   ],
                 ),
+              ],
+            ),
+            Expanded(
+              child: IndexedStack(
+                index: selectedButtonIndex,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 200.h),
+                    child: Animations(),
+                  ),
+                  MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create:
+                            (context) =>
+                                GetUsersCubit(sl.get<GetUserUseCase>()),
+                      ),
+                      BlocProvider(
+                        create:
+                            (context) => GetCountriesCubit(
+                              sl.get<GetCountriesUseCase>(),
+                            ),
+                      ),
+                      BlocProvider(
+                        create:
+                            (context) => CreateShipmentCubit(
+                              sl.get<CreateShipmentUseCase>(),
+                            ),
+                      ),
+                      BlocProvider(
+                        create:
+                            (context) => GetSuppliersCubit(
+                              sl.get<GetSuppliersUseCase>(),
+                            ),
+                      ),
+                    ],
+                    child: AddShipmentForm(),
+                  ),
+                  BlocProvider(
+                    create:
+                        (context) => GetShipmentInProccessCubit(
+                          sl.get<GetShipmentsInProcessUseCase>(),
+                        )..getShipments(),
+                    child: Builder(builder:(context) => RefetchOnShow(isVisible:selectedButtonIndex == 1,
+                    onShow: () => context.read<GetShipmentInProccessCubit>()..getShipments(),
+                    child: ShowShipmentsInProcessScreen())),
+                  ),
+                  BlocProvider(
+                    create:
+                        (context) => GetShipmentsInTheWayCubit(
+                          sl.get<GetShipmentsInTheWayUseCase>(),
+                        )..getShipmentsInTheWay(),
+                    child: Builder(
+                     builder:
+                          (context) => RefetchOnShow(isVisible:selectedButtonIndex == 2,
+                      onShow: ()=> context.read<GetShipmentsInTheWayCubit>()..getShipmentsInTheWay(),
+                      child: GetShipmentsInTheWayScreen()),
+                    ),
+                  ),
+                  BlocProvider(
+                    create:
+                        (context) => GetDeliverableShipmentsCubit(
+                          sl.get<GetDeliverableShipmentsUseCase>(),
+                        ),
+                    child: Builder(
+                      builder:
+                          (context) => RefetchOnShow(
+                            isVisible: selectedButtonIndex == 3,
+                            onShow:
+                                () =>
+                                    context
+                                        .read<GetDeliverableShipmentsCubit>()
+                                        .getDeliverableShipments(), // سمّها حسب دالتك
+                            child: const ShowDeliverableShipmentsScreen(),
+                          ),
+                    ),
+                  ),
+      
+                  // BlocProvider(
+                  //   create:
+                  //       (context) =>
+                  //           GetAllParcelsCubit(sl.get<GetAllParcelsUseCase>())
+                  //             ..getAllParcels(),
+                  //   child: ShowAllParcels(),
+                  // ),
+                  // EditReceivingShipmentsTable(
+                  //   widget: CustomOkButton(
+                  //     onTap: () {},
+                  //     color: AppColors.goldenYellow,
+                  //     label: 'تعديل',
+                  //   ),
+                  // ),
+                  // EditShippingDetail(),
+                  //  LogisticsEntryScreen(),
+                  // SubulReceiptScreen(),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

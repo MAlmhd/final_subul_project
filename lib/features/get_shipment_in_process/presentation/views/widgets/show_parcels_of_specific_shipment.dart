@@ -33,7 +33,8 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
               GetShipmentParcelsCubit(sl.get<GetShipmentParcelsUseCase>())
                 ..getShipmentParcels(shipmentId: shipmentId),
       child: Scaffold(
-        appBar: AppBar(backgroundColor: AppColors.grey),
+        appBar: AppBar( backgroundColor: AppColors.grey,
+    automaticallyImplyLeading: true,),
         body: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -46,7 +47,7 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
           child: BlocConsumer<GetShipmentParcelsCubit, GetShipmentParcelsState>(
             listener: (context, state) {
               if (state is GetShipmentParcelsFailure) {
-                showSnackBar(context, state.message, Colors.red);
+                showToastMsg(context, state.message);
               }
             },
             builder: (context, state) {
@@ -113,52 +114,49 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
                     // ),
                     SizedBox(height: 12.h),
 
-                    // السحب الأفقي للجدول بالكامل + السحب العمودي من داخل الـListView
+                    
                     Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          width: 600.w,
-                          child:
-                              parcels.isEmpty
-                                  ? Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(top: 40.h),
-                                      child: Text(
-                                        'لا توجد طرود لهذا الشحنة.',
-                                        style: Styles.textStyle5Sp.copyWith(
-                                          color: AppColors.black,
-                                        ),
+                      child: SizedBox(
+                        width: 600.w,
+                        child:
+                            parcels.isEmpty
+                                ? Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 40.h),
+                                    child: Text(
+                                      'لا توجد طرود لهذا الشحنة.',
+                                      style: Styles.textStyle5Sp.copyWith(
+                                        color: AppColors.black,
                                       ),
                                     ),
-                                  )
-                                  : ListView.builder(
-                                    itemCount: parcels.length,
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 10.w,
-                                      vertical: 8.h,
-                                    ),
-                                    itemBuilder: (context, index) {
-                                      final p = parcels[index];
-                                      return Padding(
-                                        padding: EdgeInsets.only(bottom: 12.h),
-                                        child:
-                                            CustomItemInShowAllShipmentsTable(
-                                              id: p.id,
-                                              shipmentId: shipmentId,
-                                              actualWeight:
-                                                  p.actualWeight.toString(),
-                                              length: p.length,
-                                              width: p.width,
-                                              height: p.height,
-                                              customerId: p.customerId,
-                                              firstName: p.firstName,
-                                              lastName: p.lastName,
-                                            ),
-                                      );
-                                    },
                                   ),
-                        ),
+                                )
+                                : ListView.builder(
+                                  itemCount: parcels.length,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w,
+                                    vertical: 8.h,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final p = parcels[index];
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: 12.h),
+                                      child:
+                                          CustomItemInShowAllShipmentsTable(
+                                            id: p.id,
+                                            shipmentId: shipmentId,
+                                            actualWeight:
+                                                p.actualWeight.toString(),
+                                            length: p.length,
+                                            width: p.width,
+                                            height: p.height,
+                                            customerId: p.customerId,
+                                            firstName: p.firstName,
+                                            lastName: p.lastName,
+                                          ),
+                                    );
+                                  },
+                                ),
                       ),
                     ),
 

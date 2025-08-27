@@ -1,8 +1,9 @@
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:final_subul_project/core/utils/service_locator.dart';
 import 'package:final_subul_project/core/widgets/custom_progress_indicator.dart';
 import 'package:final_subul_project/core/widgets/title_of_columns.dart';
@@ -53,14 +54,7 @@ class ShowRejectedShipmentsScreen extends StatelessWidget {
                 >(
                   listener: (context, state) {
                     if (state is GetRejectedShipmentsFailure) {
-                      Fluttertoast.showToast(
-                        msg: state.message,
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        backgroundColor: Colors.black87,
-                        textColor: Colors.white,
-                        fontSize: 16.0,
-                      );
+                       showToastMsg(context, state.message);
                     }
                   },
                   builder: (context, state) {

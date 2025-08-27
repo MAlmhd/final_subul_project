@@ -33,59 +33,47 @@ class ShipmentInfoCard extends StatelessWidget {
                 color: AppColors.lightGray2,
                 borderRadius: BorderRadius.circular(cornerRadius),
               ),
-              child: Row(
-                children: [
-                  Expanded(flex: 3, child: _buildCell(shipment!.trackingNumber)),
-                  Expanded(flex: 2, child: _buildCell(shipment!.originCountry)),
-                  Expanded(
-                    flex: 2,
-                    child: _buildCell(shipment!.destinationCountry),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: _buildCell(shipment!.actualParcelsCount.toString()),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: _buildCell(_formatDate(shipment!.customerName)),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: _buildCell(_formatDate(shipment!.status)),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: _buildCell(_formatDate(shipment!.type)),
-                  ),
-          
-                  // PopupMenuButton<String>(
-                  //   icon: Icon(Icons.more_vert, color: Colors.black87),
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(12),
-                  //   ),
-                  //   onSelected: (value) {
-                  //     switch (value) {
-                  //       case 'update':
-                         
-                  //         break;
-                  //       case 'parcels':
-                  //        
-                  //         break;
-                  //     }
-                  //   },
-                  //   itemBuilder:
-                  //       (context) => [
-                  //         PopupMenuItem(
-                  //           value: 'update',
-                  //           child: Text('تحديث  الشحنة'),
-                  //         ),
-                  //         PopupMenuItem(
-                  //           value: 'parcels',
-                  //           child: Text('عرض الطرود'),
-                  //         ),
-                  //       ],
-                  // ),
-                ],
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: Row(
+                  children: [
+                   Expanded(flex: 3, child: _buildCell(shipment!.trackingNumber)),
+      Expanded(flex: 2, child: _buildCell(shipment!.originCountry)),
+      Expanded(flex: 2, child: _buildCell(shipment!.destinationCountry)),
+      Expanded(flex: 1, child: _buildCell(shipment!.actualParcelsCount.toString())),
+      Expanded(flex: 2, child: _buildCell(shipment!.customerName)), // لا تمررها على _formatDate
+      Expanded(flex: 2, child: _buildCell(shipment!.status)),
+      Expanded(flex: 2, child: _buildCell(shipment!.type)),
+                          
+                    // PopupMenuButton<String>(
+                    //   icon: Icon(Icons.more_vert, color: Colors.black87),
+                    //   shape: RoundedRectangleBorder(
+                    //     borderRadius: BorderRadius.circular(12),
+                    //   ),
+                    //   onSelected: (value) {
+                    //     switch (value) {
+                    //       case 'update':
+                           
+                    //         break;
+                    //       case 'parcels':
+                    //        
+                    //         break;
+                    //     }
+                    //   },
+                    //   itemBuilder:
+                    //       (context) => [
+                    //         PopupMenuItem(
+                    //           value: 'update',
+                    //           child: Text('تحديث  الشحنة'),
+                    //         ),
+                    //         PopupMenuItem(
+                    //           value: 'parcels',
+                    //           child: Text('عرض الطرود'),
+                    //         ),
+                    //       ],
+                    // ),
+                  ],
+                ),
               ),
             ),
           ),

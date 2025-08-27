@@ -50,32 +50,41 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
          
           SizedBox(
             width: 20.w,
-            child: Text(
-              width,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Tooltip(
+              message: "العرض",
+              child: Text(
+                width,
+                textAlign: TextAlign.center,
+                style: Styles.textStyle5Sp,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           SizedBox(
             width: 20.w,
-            child: Text(
-              length,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Tooltip(
+              message: "الطول",
+              child: Text(
+                length,
+                textAlign: TextAlign.center,
+                style: Styles.textStyle5Sp,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           SizedBox(
             width: 40.w,
-            child: Text(
-              height,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Tooltip(
+              message: "الارتفاع",
+              child: Text(
+                height,
+                textAlign: TextAlign.center,
+                style: Styles.textStyle5Sp,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           
@@ -84,12 +93,15 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
           
           SizedBox(
             width: 40.w,
-            child: Text(
-              actualWeight,
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Tooltip(
+              message: "الوزن الفعلي",
+              child: Text(
+                actualWeight,
+                textAlign: TextAlign.center,
+                style: Styles.textStyle5Sp,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           // SizedBox(
@@ -104,12 +116,15 @@ class CustomItemInShowAllShipmentsTable extends StatelessWidget {
           // ),
           SizedBox(
             width: 40.w,
-            child: Text(
-              '$firstName $lastName',
-              textAlign: TextAlign.center,
-              style: Styles.textStyle5Sp,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Tooltip(
+              message: "اسم الزبون",
+              child: Text(
+                '$firstName $lastName',
+                textAlign: TextAlign.center,
+                style: Styles.textStyle5Sp,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           PopupMenuButton<String>(

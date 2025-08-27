@@ -1,8 +1,9 @@
+import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:final_subul_project/core/helpers/assets_data.dart';
 import 'package:final_subul_project/core/helpers/constants.dart';
@@ -30,14 +31,7 @@ class DetailsOfBill extends StatelessWidget {
         body: BlocConsumer<GetInvoicesCubit, GetInvoicesState>(
           listener: (context, state) {
             if (state is GetInvoicesFailure) {
-              Fluttertoast.showToast(
-                msg: state.message,
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.black87,
-                textColor: Colors.white,
-                fontSize: 16.0,
-              );
+              showToastMsg(context, state.message);
             }
           },
           builder: (context, state) {
@@ -91,7 +85,7 @@ class DetailsOfBill extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SvgPicture.network(
-                                    'http://localhost/Subul/public${state.invoice.qrCode}',
+                                    'https://bservice-iq.com${state.invoice.qrCode}',
                                     width: size.width / 5,
                                     placeholderBuilder:
                                         (context) =>

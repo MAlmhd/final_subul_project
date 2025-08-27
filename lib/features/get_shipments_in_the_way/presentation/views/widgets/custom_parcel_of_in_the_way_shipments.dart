@@ -39,99 +39,117 @@ class CustomParcelOfInTheWayShipments extends StatelessWidget {
       onTap: () {
         context.pushNamed(Routes.updateParcelInfoScreen, arguments: id);
       },
-      child: Container(
-        width: 600.w,
-        height: 55.h,
-        decoration: BoxDecoration(
-          color: AppColors.lightGray2,
-          borderRadius: BorderRadius.circular(cornerRadius),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 20.w,
-              child: Text(
-                width,
-                textAlign: TextAlign.center,
-                style: Styles.textStyle5Sp,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Container(
+          width: 600.w,
+          height: 55.h,
+          decoration: BoxDecoration(
+            color: AppColors.lightGray2,
+            borderRadius: BorderRadius.circular(cornerRadius),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Tooltip(
+                message: "العرض",
+                child: SizedBox(
+                  width: 20.w,
+                  child: Text(
+                    width,
+                    textAlign: TextAlign.center,
+                    style: Styles.textStyle5Sp,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 20.w,
-              child: Text(
-                length,
-                textAlign: TextAlign.center,
-                style: Styles.textStyle5Sp,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              Tooltip(
+                message: "الطول",
+                child: SizedBox(
+                  width: 20.w,
+                  child: Text(
+                    length,
+                    textAlign: TextAlign.center,
+                    style: Styles.textStyle5Sp,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              width: 20.w,
-              child: Text(
-                height,
-                textAlign: TextAlign.center,
-                style: Styles.textStyle5Sp,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              Tooltip(
+                message: 'الارتفاع',
+                child: SizedBox(
+                  width: 20.w,
+                  child: Text(
+                    height,
+                    textAlign: TextAlign.center,
+                    style: Styles.textStyle5Sp,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-            ),
-
-            SizedBox(
-              width: 40.w,
-              child: Text(
-                actualWeight,
-                textAlign: TextAlign.center,
-                style: Styles.textStyle5Sp,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+        
+              Tooltip(
+                message: "الوزن الفعلي",
+                child: SizedBox(
+                  width: 40.w,
+                  child: Text(
+                    actualWeight,
+                    textAlign: TextAlign.center,
+                    style: Styles.textStyle5Sp,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-            ),
-            // SizedBox(
-            //   width: 40.w,
-            //   child: Text(
-            //     '7575757577',
-            //     textAlign: TextAlign.center,
-            //     style: Styles.textStyle5Sp,
-            //     maxLines: 1,
-            //     overflow: TextOverflow.ellipsis,
-            //   ),
-            // ),
-            SizedBox(
-              width: 40.w,
-              child: Text(
-                '$firstName $lastName',
-                textAlign: TextAlign.center,
-                style: Styles.textStyle5Sp,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              // SizedBox(
+              //   width: 40.w,
+              //   child: Text(
+              //     '7575757577',
+              //     textAlign: TextAlign.center,
+              //     style: Styles.textStyle5Sp,
+              //     maxLines: 1,
+              //     overflow: TextOverflow.ellipsis,
+              //   ),
+              // ),
+              Tooltip(
+                message: "اسم الزبون",
+                child: SizedBox(
+                  width: 40.w,
+                  child: Text(
+                    '$firstName $lastName',
+                    textAlign: TextAlign.center,
+                    style: Styles.textStyle5Sp,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
-            ),
-            // PopupMenuButton<String>(
-            //   icon: Icon(Icons.more_vert, color: AppColors.black),
-            //   onSelected: (value) {
-            //     if (value == 'view') {
-            //       //  context.pushNamed(Routes.showParcelItemsScreen,arguments: id);
-            //     } else if (value == 'create') {
-            //       //  context.pushNamed(Routes.createParcelItemScreen, arguments: id);
-            //     }
-            //   },
-            //   itemBuilder:
-            //       (context) => [
-            //         // PopupMenuItem(
-            //         //   value: 'view',
-            //         //   child: Text('عرض عناصر الطرد'),
-            //         // ),
-            //         // PopupMenuItem(
-            //         //   value: 'create',
-            //         //   child: Text('إنشاء عناصر للطرد'),
-            //         // ),
-            //       ],
-            // ),
-          ],
+              // PopupMenuButton<String>(
+              //   icon: Icon(Icons.more_vert, color: AppColors.black),
+              //   onSelected: (value) {
+              //     if (value == 'view') {
+              //       //  context.pushNamed(Routes.showParcelItemsScreen,arguments: id);
+              //     } else if (value == 'create') {
+              //       //  context.pushNamed(Routes.createParcelItemScreen, arguments: id);
+              //     }
+              //   },
+              //   itemBuilder:
+              //       (context) => [
+              //         // PopupMenuItem(
+              //         //   value: 'view',
+              //         //   child: Text('عرض عناصر الطرد'),
+              //         // ),
+              //         // PopupMenuItem(
+              //         //   value: 'create',
+              //         //   child: Text('إنشاء عناصر للطرد'),
+              //         // ),
+              //       ],
+              // ),
+            ],
+          ),
         ),
       ),
     );

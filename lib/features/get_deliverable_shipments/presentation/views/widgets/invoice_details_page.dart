@@ -36,7 +36,7 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
         child: BlocConsumer<GetInvoiceDetailsCubit, GetInvoiceDetailsState>(
           listener: (context, state) {
             if (state is GetInvoiceDetailsFailure) {
-              showSnackBar(context, state.message, Colors.red);
+              showToastMsg(context, state.message);
             }
           },
           builder: (context, state) {

@@ -52,7 +52,7 @@ class CustomShipmentItem extends StatelessWidget {
                   width: 30.w,
                   height: 35.h,
                   decoration: BoxDecoration(
-                    color: AppColors.green,
+                    color: Colors.red,
                     borderRadius: BorderRadius.circular(cornerRadius),
                   ),
                   child: Center(

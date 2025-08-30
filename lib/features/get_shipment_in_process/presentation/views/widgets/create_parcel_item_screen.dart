@@ -281,13 +281,13 @@ class _CreateParcelItemScreenState extends State<CreateParcelItemScreen> {
 
                     setState(() {
                       items.add(parcel);
-                      // اختياري: تفريغ الحقول بعد الإضافة
-                      // _typeCtrl.clear();
-                      // selctedAllowedContentEntity = null;
-                      // selectedType = null;
-                      // quantityController.clear();
-                      // valuePerItemController.clear();
-                      // descriptionController.clear();
+                    
+                      _typeCtrl.clear();
+                      selctedAllowedContentEntity = null;
+                      selectedType = null;
+                      quantityController.clear();
+                      valuePerItemController.clear();
+                      descriptionController.clear();
                     });
                   },
                   color: AppColors.goldenYellow,

@@ -10,6 +10,9 @@ class UnapprovedShipmentModel extends UnApprovedShipmentsEntity {
   final int declaredParcelsCount;
   final DateTime createdAt;
 
+  // ✅ جديد
+  final String? invoiceFile2;
+
   UnapprovedShipmentModel({
     required this.id,
     required this.trackingNumber,
@@ -19,26 +22,30 @@ class UnapprovedShipmentModel extends UnApprovedShipmentsEntity {
     required this.status,
     required this.declaredParcelsCount,
     required this.createdAt,
+    this.invoiceFile2,
   }) : super(
-         id,
-         trackingNumber,
-         type,
-         customerId,
-         customerName ?? "No Name",
-         status ?? "",
-         declaredParcelsCount,
-       );
+          id,
+          trackingNumber,
+          type,
+          customerId,
+          customerName ?? "No Name",
+          status ?? "",
+          declaredParcelsCount,
+           invoiceFile2,    // ✅ مرّرها للـ Entity
+                 // (اختياري) تمرير التاريخ
+        );
 
   factory UnapprovedShipmentModel.fromJson(Map<String, dynamic> json) {
     return UnapprovedShipmentModel(
-      id: json['id'],
-      trackingNumber: json['tracking_number'],
-      type: json['type'],
-      customerId: json['customer_id'],
-      customerName: json['customer_name'],
-      status: json['status'],
-      declaredParcelsCount: json['declared_parcels_count'],
-      createdAt: DateTime.parse(json['created_at']),
+      id: json['id'] as int,
+      trackingNumber: json['tracking_number'] as String,
+      type: json['type'] as String,
+      customerId: json['customer_id'] as int,
+      customerName: json['customer_name'] as String?,
+      status: json['status'] as String?,
+      declaredParcelsCount: json['declared_parcels_count'] as int,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      invoiceFile2: json['invoice_file'] as String?, // ✅ قراءة الرابط
     );
   }
 
@@ -52,6 +59,7 @@ class UnapprovedShipmentModel extends UnApprovedShipmentsEntity {
       'status': status,
       'declared_parcels_count': declaredParcelsCount,
       'created_at': createdAt.toIso8601String(),
+      'invoice_file': invoiceFile2, // ✅ كتابة الرابط
     };
   }
 }

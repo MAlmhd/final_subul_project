@@ -10,5 +10,6 @@ abstract class UpdateShipmentForDeliveryRepo {
     required int idDelivery,
     required int actualParcelsCount,
     required int idShipment,
+    required int flightId,
   });
 }

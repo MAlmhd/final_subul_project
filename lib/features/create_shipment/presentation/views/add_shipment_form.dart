@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
+import 'package:final_subul_project/core/widgets/upload_image.dart';
 import 'package:final_subul_project/features/create_shipment/domain/entities/supplier_entity/supplier_entity.dart';
 import 'package:final_subul_project/features/create_shipment/presentation/manager/get_suppliers_cubit/get_suppliers_cubit.dart';
+import 'package:final_subul_project/features/create_shipment/presentation/views/widgets/multi_select_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +21,7 @@ import 'package:final_subul_project/features/create_shipment/presentation/manage
 import 'package:final_subul_project/features/create_shipment/presentation/manager/get_users_cubit/get_users_cubit.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/generic_dropdown_field.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/tracking_number_card.dart';
-
+import 'package:image_picker/image_picker.dart';
 
 class AddShipmentForm extends StatefulWidget {
   const AddShipmentForm({super.key});
@@ -35,6 +39,9 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
   SupplierEntity? selectedSupplier;
   List<CountryEntity> countries = [];
   List<SupplierEntity> suppliers = [];
+  List<SupplierEntity> selectedSuppliers = [];
+  XFile? invoiceFile;
+  Uint8List? imageBytesInvoiceFile;
   final List<String> typeOfShipments = ['ship_pay', 'ship_only', 'pay_only'];
   String? selectedType;
   String? numberTracking;
@@ -42,6 +49,19 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
   final TextEditingController declaredParcelsCountController =
       TextEditingController();
   final TextEditingController notesController = TextEditingController();
+  Future<void> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? selectedImage = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+    if (selectedImage != null) {
+      final Uint8List bytes = await selectedImage.readAsBytes();
+      setState(() {
+        invoiceFile = selectedImage;
+        imageBytesInvoiceFile = bytes;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -179,20 +199,41 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                       if (state is GetSuppliersSuccess) {
                         suppliers = state.suppliers;
                       }
-                      return GenericDropdownField<SupplierEntity>(
-                        items: suppliers,
-                        selectedItem: selectedSupplier,
-                        onChanged:
-                            (value) => setState(() => selectedSupplier = value),
-                        itemAsString: (c) => c.supplierName,
-                        hintText: 'المزود',
+
+                      final selectedNames = selectedSuppliers
+                          .map((e) => e.supplierName)
+                          .join(', ');
+
+                      // لإظهار رسالة خطأ إن لم يختر المستخدم مورّدين
+                      final suppliersError =
+                          (_formKey.currentState == null)
+                              ? null
+                              : (selectedSuppliers.isEmpty
+                                  ? 'الرجاء اختيار المزودين'
+                                  : null);
+
+                      return MultiSelectField<SupplierEntity>(
+                        hintText: 'المزودون',
                         svgIcon: SvgPicture.asset(
                           AssetsData.bulb,
                           height: 20.h,
                         ),
-                        validator:
-                            (value) =>
-                                value == null ? 'الرجاء اختيار المزود' : null,
+                        selectedItemsText: selectedNames,
+                        errorText: suppliersError,
+                        onTap: () async {
+                          final results =
+                              await showMultiSelectDialog<SupplierEntity>(
+                                context: context,
+                                items: suppliers,
+                                initiallySelected: selectedSuppliers,
+                                equals: (a, b) => a.supplierId == b.supplierId,
+                                labelOf: (x) => x.supplierName,
+                                title: 'اختر المزودين',
+                              );
+                          if (results != null) {
+                            setState(() => selectedSuppliers = results);
+                          }
+                        },
                       );
                     },
                   ),
@@ -224,13 +265,17 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                       AssetsData.notesIcon,
                       height: 15.h,
                     ),
-                    validator:
-                        (value) =>
-                            (value == null || value.isEmpty)
-                                ? 'يرجى إدخال الملاحظات'
-                                : null,
                   ),
 
+                  SizedBox(height: 20.h),
+                  SizedBox(
+                    width : 15.w,
+                    child: UploadImage(
+                      label: 'أدخل صورة الفاتورة',
+                      onTap: () => pickImage(),
+                      imageBytes: imageBytesInvoiceFile,
+                    ),
+                  ),
                   SizedBox(height: 20.h),
 
                   // ===== زر إنشاء الشحنة =====
@@ -259,6 +304,7 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                         cursor: SystemMouseCursors.click,
                         child: GestureDetector(
                           onTap: () {
+                            if (invoiceFile == null) return;
                             if (_formKey.currentState!.validate()) {
                               context
                                   .read<CreateShipmentCubit>()
@@ -271,7 +317,11 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                                     destenationCountryId:
                                         selectedDestinitionCountry!.id,
                                     originCountryId: selectedOriginCountry!.id,
-                                    supplierId: selectedSupplier!.supplierId,
+                                    supplierIds:
+                                        selectedSuppliers
+                                            .map((e) => e.supplierId)
+                                            .toList(),
+                                    invoiceFile: invoiceFile!,
                                   );
                             }
                           },

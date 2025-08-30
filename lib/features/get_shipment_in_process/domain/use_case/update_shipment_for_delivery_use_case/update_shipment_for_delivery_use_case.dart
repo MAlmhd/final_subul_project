@@ -23,7 +23,7 @@ class UpdateShipmentForDeliveryUseCase
       photo: params!.photo,
       idDelivery: params.idDelivery,
       actualParcelsCount: params.actualParcelsCount,
-      idShipment: params.idShipment,
+      idShipment: params.idShipment, flightId: params.flightId,
     );
   }
 }
@@ -33,11 +33,13 @@ class UpdateShipmentForDeliveryParams {
   final int idShipment;
   final int actualParcelsCount;
   final XFile photo;
+  final int flightId;
 
   UpdateShipmentForDeliveryParams({
     required this.idDelivery,
     required this.idShipment,
     required this.actualParcelsCount,
     required this.photo,
+    required this.flightId,
   });
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:final_subul_project/core/helpers/extensions.dart';
 import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:final_subul_project/core/widgets/custom_ok_button.dart';
@@ -33,8 +35,10 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
               GetShipmentParcelsCubit(sl.get<GetShipmentParcelsUseCase>())
                 ..getShipmentParcels(shipmentId: shipmentId),
       child: Scaffold(
-        appBar: AppBar( backgroundColor: AppColors.grey,
-    automaticallyImplyLeading: true,),
+        appBar: AppBar(
+          backgroundColor: AppColors.grey,
+          automaticallyImplyLeading: true,
+        ),
         body: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -114,7 +118,6 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
                     // ),
                     SizedBox(height: 12.h),
 
-                    
                     Expanded(
                       child: SizedBox(
                         width: 600.w,
@@ -141,19 +144,17 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
                                     final p = parcels[index];
                                     return Padding(
                                       padding: EdgeInsets.only(bottom: 12.h),
-                                      child:
-                                          CustomItemInShowAllShipmentsTable(
-                                            id: p.id,
-                                            shipmentId: shipmentId,
-                                            actualWeight:
-                                                p.actualWeight.toString(),
-                                            length: p.length,
-                                            width: p.width,
-                                            height: p.height,
-                                            customerId: p.customerId,
-                                            firstName: p.firstName,
-                                            lastName: p.lastName,
-                                          ),
+                                      child: CustomItemInShowAllShipmentsTable(
+                                        id: p.id,
+                                        shipmentId: shipmentId,
+                                        actualWeight: p.actualWeight.toString(),
+                                        length: p.length,
+                                        width: p.width,
+                                        height: p.height,
+                                        customerId: p.customerId,
+                                        firstName: p.firstName,
+                                        lastName: p.lastName,
+                                      ),
                                     );
                                   },
                                 ),
@@ -235,10 +236,15 @@ class ShowParcelsOfSpecificShipment extends StatelessWidget {
                         ),
                         child: CustomOkButton(
                           onTap: () {
+                            log("createdParcelsCount = ${state.parcels.createdParcelsCount}");
                             context.pushNamed(
-                          Routes.uploadNameAndNumberOfDriver,
-                          arguments: shipmentId,
-                        );
+                              Routes.uploadNameAndNumberOfDriver,
+                              arguments: {
+                                "id": shipmentId,
+                                "numberOfParcels":
+                                    state.parcels.createdParcelsCount,
+                              },
+                            );
                           },
                           color: AppColors.deepPurple,
                           label: "انهاء الشحنة",

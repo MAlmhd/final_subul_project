@@ -1,4 +1,4 @@
-import 'dart:ui';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,9 +11,7 @@ import 'package:final_subul_project/core/widgets/custom_icon_of_side_bar.dart';
 import 'package:final_subul_project/core/widgets/custom_ok_button.dart';
 import 'package:final_subul_project/core/widgets/custom_switch_label.dart';
 import 'package:final_subul_project/core/widgets/text_logo.dart';
-import 'package:final_subul_project/features/warehouse_manager/ui/widgets/custom_note.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/dimension_calculation.dart';
-import 'package:final_subul_project/features/warehouse_manager/ui/widgets/labeled_icon_text_field.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/labeled_input_field.dart';
 import 'package:final_subul_project/features/warehouse_manager/ui/widgets/volumetric_weight_calculation.dart';
 

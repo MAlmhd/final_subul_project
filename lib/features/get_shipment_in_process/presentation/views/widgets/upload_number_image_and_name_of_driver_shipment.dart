@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:final_subul_project/core/helpers/extensions.dart';
 import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/get_flights_use_case/get_flights_use_case.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_flights_cubit/get_flights_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,13 +21,14 @@ import 'package:final_subul_project/features/get_shipment_in_process/domain/use_
 import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/update_shipment_for_delivery_use_case/update_shipment_for_delivery_use_case.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_drivers_cubit/get_drivers_cubit.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/update_shipment_for_delivery_cubit/update_shipment_for_delivery_cubit.dart';
-import 'package:final_subul_project/features/warehouse_manager/ui/widgets/card_text_field.dart';
 
 class UploadNumberImageAndNameOfDriverShipment extends StatefulWidget {
   final int shipmentId;
+  final int createdParcelsNumber;
   const UploadNumberImageAndNameOfDriverShipment({
     super.key,
     required this.shipmentId,
+    required this.createdParcelsNumber,
   });
 
   @override
@@ -36,6 +39,7 @@ class UploadNumberImageAndNameOfDriverShipment extends StatefulWidget {
 class _UploadNumberImageAndNameOfDriverShipmentState
     extends State<UploadNumberImageAndNameOfDriverShipment> {
   int? selectedIdDelivery;
+  int? selectedFlightId;
 
   XFile? pickedImage;
   Uint8List? imageBytes;
@@ -52,12 +56,9 @@ class _UploadNumberImageAndNameOfDriverShipmentState
     }
   }
 
-  final TextEditingController countOfParcels = TextEditingController();
-
-  @override
-  void dispose() {
-    countOfParcels.dispose();
-    super.dispose();
+  String _fmtHM(DateTime dt) {
+    String two(n) => n.toString().padLeft(2, '0');
+    return '${two(dt.hour)}:${two(dt.minute)}';
   }
 
   @override
@@ -72,15 +73,17 @@ class _UploadNumberImageAndNameOfDriverShipmentState
         ),
         BlocProvider(
           create:
+              (_) => GetFlightsCubit(sl.get<GetFlightsUseCase>())..getFlights(),
+        ),
+        BlocProvider(
+          create:
               (context) => UpdateShipmentForDeliveryCubit(
                 sl.get<UpdateShipmentForDeliveryUseCase>(),
               ),
         ),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true,
-        ),
+        appBar: AppBar(automaticallyImplyLeading: true),
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.h),
           child: Center(
@@ -91,13 +94,13 @@ class _UploadNumberImageAndNameOfDriverShipmentState
               >(
                 listener: (context, state) {
                   if (state is UpdateShipmentForDeliveryFailure) {
-                   showToastMsg(context, state.message);
+                    showToastMsg(context, state.message);
                   } else if (state is UpdateShipmentForDeliverySuccess) {
-                   showToastMsg(context, "تم التحديث بنجاح");
+                    showToastMsg(context, "تم التحديث بنجاح");
                     context.pushNamed(
-                          Routes.shipmentReceipt,
-                          arguments: widget.shipmentId,
-                        );
+                      Routes.shipmentReceipt,
+                      arguments: widget.shipmentId,
+                    );
                   }
                 },
                 builder: (context, state) {
@@ -119,13 +122,164 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CardTextField(
-                          svgPicture: SvgPicture.asset(
-                            AssetsData.outlinePurpleBox,
-                          ),
-                          hintText: 'عدد الطرود',
-                          controller: countOfParcels,
+                        // CardTextField(
+                        //   svgPicture: SvgPicture.asset(
+                        //     AssetsData.outlinePurpleBox,
+                        //   ),
+                        //   hintText: 'عدد الطرود',
+                        //   controller: countOfParcels,
+                        // ),
+                        BlocBuilder<GetFlightsCubit, GetFlightsState>(
+                          builder: (context, fState) {
+                            if (fState is GetFlightsLoading) {
+                              return const Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (fState is GetFlightsFailure) {
+                              return _DropdownCard(
+                                child: const Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: Text('تعذّر تحميل الرحلات'),
+                                ),
+                              );
+                            }
+                            if (fState is GetFlightsSuccess) {
+                              final flights = fState.flights;
+                              if (flights.isEmpty) {
+                                return _DropdownCard(
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: Text('لا توجد رحلات متاحة'),
+                                  ),
+                                );
+                              }
+
+                              return _DropdownCard(
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: DropdownButtonFormField<int>(
+                                    value: selectedFlightId,
+                                    isExpanded: true,
+                                    isDense: false, // ↑ زر أعلى قليلًا
+                                    itemHeight:
+                                        null, // ↑ عناصر القائمة تسمح بأكثر من سطر
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                    ),
+                                    hint: Text(
+                                      'اختر الرحلة',
+                                      style: Styles.textStyle3Sp.copyWith(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+
+                                    // ماذا يُعرض داخل الزر بعد الاختيار (سطر واحد مضغوط)
+                                    selectedItemBuilder: (ctx) {
+                                      return flights.map((f) {
+                                        final routeText =
+                                            '${f.departureAirport!.code} ${_fmtHM(f.departureTime)} → '
+                                            '${f.arrivalAirport!.code} ${_fmtHM(f.arrivalTime)}';
+                                        return Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.flight_takeoff,
+                                              color: AppColors.deepPurple,
+                                              size: 18,
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                '${f.flightNumber}  •  $routeText',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Styles.textStyle4Sp,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }).toList();
+                                    },
+
+                                    // عناصر القائمة (سطرين بشكل جميل)
+                                    items:
+                                        flights.map((f) {
+                                          final routeText =
+                                              '${f.departureAirport!.code} ${_fmtHM(f.departureTime)} → '
+                                              '${f.arrivalAirport!.code} ${_fmtHM(f.arrivalTime)}';
+                                          return DropdownMenuItem<int>(
+                                            value: f.id,
+                                            child: Row(
+                                              mainAxisSize:
+                                                  MainAxisSize
+                                                      .min, // لا توسّع بلا حدود
+                                              children: [
+                                                const Icon(
+                                                  Icons.flight_takeoff,
+                                                  color: AppColors.deepPurple,
+                                                  size: 18,
+                                                ),
+                                                const SizedBox(width: 8),
+                                                Flexible(
+                                                  // بدل Expanded داخل قائمة
+                                                  fit: FlexFit.loose,
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        f.flightNumber,
+                                                        style: Styles
+                                                            .textStyle4Sp
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ),
+                                                        overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                        maxLines: 1,
+                                                      ),
+                                                      const SizedBox(height: 2),
+                                                      Text(
+                                                        routeText,
+                                                        style: Styles
+                                                            .textStyle3Sp
+                                                            .copyWith(
+                                                              color:
+                                                                  AppColors
+                                                                      .mediumGray,
+                                                            ),
+                                                        overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                        maxLines: 1,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList(),
+
+                                    onChanged:
+                                        (v) => setState(
+                                          () => selectedFlightId = v,
+                                        ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          },
                         ),
+
                         SizedBox(height: size.height / 25),
                         BlocBuilder<GetDriversCubit, GetDriversState>(
                           builder: (context, state) {
@@ -162,7 +316,6 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                                       border: InputBorder.none,
                                       icon: SvgPicture.asset(
                                         AssetsData.personName,
-                                        
                                       ),
                                     ),
                                     hint: Text(
@@ -252,9 +405,6 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                             ? CustomProgressIndicator()
                             : CustomOkButton(
                               onTap: () {
-                                if (countOfParcels.text.isEmpty) {
-                                  return;
-                                }
                                 if (pickedImage == null) {
                                   showToastMsg(context, "ارفع صورة الشحنة");
                                   return;
@@ -268,10 +418,10 @@ class _UploadNumberImageAndNameOfDriverShipmentState
                                     .updateShipment(
                                       photo: pickedImage!,
                                       idDelivery: selectedIdDelivery!,
-                                      actualParcelsCount: int.parse(
-                                        countOfParcels.text,
-                                      ),
+                                      actualParcelsCount:
+                                          widget.createdParcelsNumber,
                                       idShipment: widget.shipmentId,
+                                      flightId: selectedFlightId!,
                                     );
                               },
                               color: AppColors.goldenYellow,
@@ -286,6 +436,26 @@ class _UploadNumberImageAndNameOfDriverShipmentState
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DropdownCard extends StatelessWidget {
+  const _DropdownCard({required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+        ],
+      ),
+      child: child,
     );
   }
 }

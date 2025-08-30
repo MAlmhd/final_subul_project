@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_subul_project/features/create_shipment/domain/entities/create_shipment_entity/create_shipment_entity.dart';
 import 'package:final_subul_project/features/create_shipment/domain/use_case/create_shipment_use_case/create_shipment_use_case.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'create_shipment_state.dart';
 
@@ -13,11 +14,12 @@ class CreateShipmentCubit extends Cubit<CreateShipmentState> {
   Future<void> createShipment({
     required String type,
     required int customerId,
-    required int supplierId,
+   required List<int> supplierIds,
     required String declaredParcelsCount,
     required String notes,
     required int originCountryId,
     required int destenationCountryId,
+    required XFile invoiceFile,
   }) async {
     emit(CreateShipmentLoading());
     CreateShipmentParams createShipmentParams = CreateShipmentParams(
@@ -25,9 +27,9 @@ class CreateShipmentCubit extends Cubit<CreateShipmentState> {
       destenationCountryId: destenationCountryId,
       type: type,
       customerId: customerId,
-     supplierId: supplierId,
+     supplierIds: supplierIds,
       declaredParcelsCount: declaredParcelsCount,
-      notes: notes,
+      notes: notes, invoiceFile: invoiceFile,
     );
 
     var data = await createShipmentUseCase.call(createShipmentParams);

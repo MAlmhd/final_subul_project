@@ -22,6 +22,8 @@ class UnApprovedShipmentsEntity  {
  
   final int numberOfShipments;
 
+  final String? invoiceFile;
+
   UnApprovedShipmentsEntity(
     this.idOfShipment,
     this.trackingString,
@@ -29,7 +31,7 @@ class UnApprovedShipmentsEntity  {
     this.idOfCustomer,
     this.nameOfCustomer,
     this.statusOfShipment,
-    this.numberOfShipments,
+    this.numberOfShipments, this.invoiceFile,
   );
 
   

@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:final_subul_project/core/widgets/refetch_on_show.dart';
+import 'package:final_subul_project/features/get_rejected_shipments/domain/use_case/get_rejected_shipments_use_case.dart';
+import 'package:final_subul_project/features/get_rejected_shipments/presentation/manager/cubit/get_rejected_shipments_cubit.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/domain/use_case/get_unapproved_shipments_use_case/get_unapproved_shipments_use_case.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/presentation/manager/get_unapproved_shipments_cubit/get_unapproved_shipments_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,104 +69,151 @@ class _HomeViewState extends State<HomeView> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
-        child: Row(
-          children: [
-            // Sidebar
-            Container(
-              width: 80.w,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(cornerRadius),
-                border: Border.all(color: AppColors.deepPurple, width: 4),
-              ),
-              child: ListView(
-                padding: EdgeInsets.symmetric(horizontal: size.width / 50),
-                children: [
-                  SizedBox(height: size.height / 13),
-                  Container(
-                    height: 60.h,
-                    decoration: BoxDecoration(
-                      color: AppColors.goldenYellow,
-                      borderRadius: BorderRadius.circular(cornerRadius),
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [AppColors.grey, AppColors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.w),
+          child: Row(
+            children: [
+              // Sidebar
+              Container(
+                width: 80.w,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(cornerRadius),
+                  border: Border.all(color: AppColors.deepPurple, width: 4),
+                ),
+                child: ListView(
+                  padding: EdgeInsets.symmetric(horizontal: size.width / 50),
+                  children: [
+                    SizedBox(height: size.height / 13),
+                    Container(
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.goldenYellow,
+                        borderRadius: BorderRadius.circular(cornerRadius),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ToggleClientCompanyButton(
+                            text: 'شركة',
+                            isSelected: selectedButtonIndex == 1,
+                            onTap: () => onButtonTap(1),
+                          ),
+                          ToggleClientCompanyButton(
+                            text: 'عميل',
+                            isSelected: selectedButtonIndex == 2,
+                            onTap: () => onButtonTap(2),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        ToggleClientCompanyButton(
-                          text: 'شركة',
-                          isSelected: selectedButtonIndex == 1,
-                          onTap: () => onButtonTap(1),
-                        ),
-                        ToggleClientCompanyButton(
-                          text: 'عميل',
-                          isSelected: selectedButtonIndex == 2,
-                          onTap: () => onButtonTap(2),
-                        ),
-                      ],
+                    SizedBox(height: size.height / 16),
+                    SideBarButton(
+                      onTap: () => onButtonTap(3),
+                      text: 'حذف عميل',
+                      isSelected: selectedButtonIndex == 3,
                     ),
-                  ),
-                  SizedBox(height: size.height / 16),
-                  SideBarButton(
-                    onTap: () => onButtonTap(3),
-                    text: 'حذف عميل',
-                    isSelected: selectedButtonIndex == 3,
-                  ),
-                  SizedBox(height: size.height / 16),
-                  SideBarButton(
-                    onTap: () => onButtonTap(4),
-                    text: 'طلبات الشحنات',
-                    isSelected: selectedButtonIndex == 4,
-                  ),
-                  SizedBox(height: size.height / 16),
-                  SideBarButton(
-                    onTap: () => context.pushNamed(Routes.trackShipmentsHome),
-                    text: 'الشحنات',
-                    isSelected: false,
-                  ),
-                  SizedBox(height: size.height / 16),
-                  SideBarButton(
-                    onTap: () => onButtonTap(5),
-                    text: 'الشحنات المرفوضة',
-                    isSelected: selectedButtonIndex == 5,
-                  ),
-                  SizedBox(height: size.height / 16),
-                  SideBarButton(
-                    onTap: () => onButtonTap(6),
-                    text: 'شحنات زبون معين',
-                    isSelected: selectedButtonIndex == 6,
-                  ),
-                ],
-              ),
-            ),
-
-            // Main Content
-            Expanded(
-              child: IndexedStack(
-                index: selectedButtonIndex,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 200.h),
-                    child: Animations(),
-                  ),
-                  SingleChildScrollView(child: RegisterCompanyScreen()),
-                  SingleChildScrollView(child: RegisterationClient()),
-                  SingleChildScrollView(child: ShowCompaniesAndClients()),
-                  SingleChildScrollView(child: UnApprovedShipmentsScreen()),
-                  SingleChildScrollView(child: ShowRejectedShipmentsScreen()),
-                  BlocProvider(
-                    create:
-                        (context) => GetCustomerShipmentsCubit(
-                          sl.get<GetCustomerShipmentsUseCase>(),
-                        ),
-                    child: SingleChildScrollView(
-                      child: ShipmentsByCodeScreen(),
+                    SizedBox(height: size.height / 16),
+                    SideBarButton(
+                      onTap: () => onButtonTap(4),
+                      text: 'طلبات الشحنات',
+                      isSelected: selectedButtonIndex == 4,
                     ),
-                  ),
-                ],
+                    SizedBox(height: size.height / 16),
+                    SideBarButton(
+                      onTap: () => context.pushNamed(Routes.trackShipmentsHome),
+                      text: 'الشحنات',
+                      isSelected: false,
+                    ),
+                    SizedBox(height: size.height / 16),
+                    SideBarButton(
+                      onTap: () => onButtonTap(5),
+                      text: 'الشحنات المرفوضة',
+                      isSelected: selectedButtonIndex == 5,
+                    ),
+                    SizedBox(height: size.height / 16),
+                    SideBarButton(
+                      onTap: () => onButtonTap(6),
+                      text: 'شحنات زبون معين',
+                      isSelected: selectedButtonIndex == 6,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+        
+              // Main Content
+              Expanded(
+                child: IndexedStack(
+                  index: selectedButtonIndex,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 200.h),
+                      child: Animations(),
+                    ),
+                    SingleChildScrollView(child: RegisterCompanyScreen()),
+                    SingleChildScrollView(child: RegisterationClient()),
+                    SingleChildScrollView(child: ShowCompaniesAndClients()),
+                    BlocProvider(
+                      create:
+                          (context) => GetUnapprovedShipmentsCubit(
+                            sl.get<GetUnapprovedShipmentsUseCase>(),
+                          ),
+                      child: SingleChildScrollView(
+                        child: Builder(
+                          builder:
+                              (context) => RefetchOnShow(
+                                isVisible: selectedButtonIndex == 4,
+                                onShow:
+                                    () =>
+                                        context
+                                            .read<GetUnapprovedShipmentsCubit>()
+                                          ..getUnapprovedShipments(),
+                                child: UnApprovedShipmentsScreen(),
+                              ),
+                        ),
+                      ),
+                    ),
+                    BlocProvider(
+                      create:
+                          (context) => GetRejectedShipmentsCubit(
+                            sl.get<GetRejectedShipmentsUseCase>(),
+                          ),
+                      child: SingleChildScrollView(
+                        child: Builder(
+                          builder:
+                              (context) => RefetchOnShow(
+                                isVisible: selectedButtonIndex == 5,
+                                onShow:
+                                    () =>
+                                        context.read<GetRejectedShipmentsCubit>()
+                                          ..getRejectedShipments(),
+                                child: ShowRejectedShipmentsScreen(),
+                              ),
+                        ),
+                      ),
+                    ),
+                    BlocProvider(
+                      create:
+                          (context) => GetCustomerShipmentsCubit(
+                            sl.get<GetCustomerShipmentsUseCase>(),
+                          ),
+                      child: SingleChildScrollView(
+                        child: ShipmentsByCodeScreen(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -20,5 +20,8 @@ static const String trackShipmentsHome = '/trackShipmentsHome';
   static const String markShipmentDeliveredScreen = '/markShipmentDeliveredScreen';
   static const String invoiceDetailsPage = '/invoiceDetailsPage';
   static const String showShipmentsInProcessScreen = '/showShipmentsInProcessScreen';
+  static const String shipmentDetailsCardScrren = '/shipmentDetailsCardScrren';
+  static const String shipmentDetailsPage = '/shipmentDetailsPage';
+  static const String payTheBillOfUnApprovedShipment = '/payTheBillOfUnApprovedShipment';
   
 }

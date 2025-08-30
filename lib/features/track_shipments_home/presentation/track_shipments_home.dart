@@ -1,3 +1,5 @@
+import 'package:final_subul_project/core/helpers/extensions.dart';
+import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_subul_project/core/theming/app_colors.dart';
@@ -14,6 +16,15 @@ class TrackShipmentsHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.grey,
+        leading: IconButton(
+          onPressed: () {
+            context.pushNamedAndRemoveUntil(
+              Routes.homeView,
+              predicate: (Route<dynamic> route) => false,
+            );
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(

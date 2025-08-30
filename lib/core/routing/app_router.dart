@@ -8,6 +8,10 @@ import 'package:final_subul_project/features/get_shipment_in_process/domain/use_
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/manager/get_shipments_in_process_cubit/get_shipment_in_proccess_cubit.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/presentation/views/show_shipments_in_process_screen.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/views/widgets/update_parcel_info_screen.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/domain/entities/un_approved_shipment_entity/un_approved_shipments_entity.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/presentation/views/widgets/pay_the_bill_of_un_approved_shipment.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/presentation/views/widgets/shipment_details_card.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/presentation/views/widgets/shipment_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_subul_project/core/routing/routes.dart';
@@ -71,10 +75,12 @@ class AppRouter {
               ),
         );
       case Routes.uploadNameAndNumberOfDriver:
-        final id = arguments as int;
+        final args = arguments as Map;
+        final id = args["id"] as int;
+        final numberOfParcelsCreated = args["numberOfParcels"] as int;
         return MaterialPageRoute(
           builder:
-              (_) => UploadNumberImageAndNameOfDriverShipment(shipmentId: id),
+              (_) => UploadNumberImageAndNameOfDriverShipment(shipmentId: id ,createdParcelsNumber:numberOfParcelsCreated ,),
         );
       case Routes.editCountry:
         final id = arguments as int;
@@ -251,14 +257,39 @@ class AppRouter {
               ),
         );
       case Routes.showShipmentsInProcessScreen:
-  return MaterialPageRoute(
-    builder: (context) => BlocProvider(
-      create: (context) => GetShipmentInProccessCubit(
-        sl.get<GetShipmentsInProcessUseCase>(), // عدّل اسم الـ use case الصحيح عندك
-      )..getShipments(),               // استدعاء الجلب الأولي إن لزم
-      child: const ShowShipmentsInProcessScreen(),
-    ),
-  );
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create:
+                    (context) => GetShipmentInProccessCubit(
+                      sl
+                          .get<
+                            GetShipmentsInProcessUseCase
+                          >(), // عدّل اسم الـ use case الصحيح عندك
+                    )..getShipments(), // استدعاء الجلب الأولي إن لزم
+                child: const ShowShipmentsInProcessScreen(),
+              ),
+        );
+      case Routes.shipmentDetailsCardScrren:
+        final UnApprovedShipmentsEntity unApprovedShipmentsEntity =
+            arguments as UnApprovedShipmentsEntity;
+        return MaterialPageRoute(
+          builder:
+              (context) => ShipmentDetailsCard(data: unApprovedShipmentsEntity),
+        );
+      case Routes.shipmentDetailsPage:
+        final UnApprovedShipmentsEntity unApprovedShipmentsEntity =
+            arguments as UnApprovedShipmentsEntity;
+        return MaterialPageRoute(
+          builder:
+              (context) => ShipmentDetailsPage(data: unApprovedShipmentsEntity),
+        );
+      case Routes.payTheBillOfUnApprovedShipment:
+        final UnApprovedShipmentsEntity unApprovedShipmentsEntity =
+            arguments as UnApprovedShipmentsEntity;
+        return MaterialPageRoute(
+          builder: (context) => PayTheBillOfUnApprovedShipment(unApprovedShipmentsEntity: unApprovedShipmentsEntity,),
+        );
 
       default:
         return null;

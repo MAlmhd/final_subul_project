@@ -16,9 +16,13 @@ import 'package:final_subul_project/features/get_deliverable_shipments/domain/us
 import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/get_invoice_details_use_case/get_invoice_details_use_case.dart';
 import 'package:final_subul_project/features/get_deliverable_shipments/domain/use_case/mark_shipment_delivered_use_case/mark_shipment_delivered_use_case.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/data/data_source/create_multiple_parcels_data_source/create_multiple_parcels_remote_data_source.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/data/data_source/get_flights_remote_data_source/get_flights_remote_data_source.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/data/repos/create_multiple_parcels_repo_impl/create_multiple_parcels_repo_impl.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/data/repos/get_flights_repo_impl.dart/get_flights_repo_impl.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/domain/repos/create_multiple_parcels_repo/create_multiple_parcels_repo.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/repos/get_flights_repo/get_flights_repo.dart';
 import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/create_multiple_parcels_use_case/create_multiple_parcels_use_case.dart';
+import 'package:final_subul_project/features/get_shipment_in_process/domain/use_case/get_flights_use_case/get_flights_use_case.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/data/data_source/update_parcel_info_data_source/update_parcel_info_remote_data_source.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/data/repos/update_parcel_info_repo_impl/update_parcel_info_repo_impl.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/domain/repos/update_parcel_info_repo/update_parcel_info_repo.dart';
@@ -701,6 +705,24 @@ void setupServiceLocator() {
   sl.registerLazySingleton<GetInvoiceDetailsUseCase>(
     () => GetInvoiceDetailsUseCase(sl.get<GetInvoiceDetailsRepo>()),
   );
+
+
+
+
+  
+ // get flights
+  sl.registerLazySingleton<GetFlightsRemoteDataSource>(
+    () => GetFlightsRemoteDataSourceImpl(sl.get<ApiService>()),
+  );
+
+  sl.registerLazySingleton<GetFlightsRepo>(
+    () => GetFlightsRepoImpl(sl.get<GetFlightsRemoteDataSource>()),
+  );
+
+  sl.registerLazySingleton<GetFlightsUseCase>(
+    () => GetFlightsUseCase(sl.get<GetFlightsRepo>()),
+  );
+
 
 
 }

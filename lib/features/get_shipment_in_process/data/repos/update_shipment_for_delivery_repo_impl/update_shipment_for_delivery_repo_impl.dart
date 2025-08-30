@@ -21,6 +21,7 @@ class UpdateShipmentForDeliveryRepoImpl
     required int idDelivery,
     required int actualParcelsCount,
     required int idShipment,
+    required int flightId,
   }) async {
     try {
       var data = await updateShipmentForDeliveryRemoteDataSource
@@ -28,7 +29,7 @@ class UpdateShipmentForDeliveryRepoImpl
             photo: photo,
             idDelivery: idDelivery,
             actualParcelsCount: actualParcelsCount,
-            idShipment: idShipment,
+            idShipment: idShipment, flightId: flightId,
           );
       return right(data);
     } catch (e) {

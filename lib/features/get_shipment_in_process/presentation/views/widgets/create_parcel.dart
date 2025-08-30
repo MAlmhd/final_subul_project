@@ -446,9 +446,7 @@ class _CreateParcelState extends State<CreateParcel> {
                                                     );
                                                     return;
                                                   }
-                                                  if (notesController
-                                                          .text
-                                                          .isEmpty ||
+                                                  if (
                                                       brandController
                                                           .text
                                                           .isEmpty ||

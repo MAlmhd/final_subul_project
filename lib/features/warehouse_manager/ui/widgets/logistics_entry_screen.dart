@@ -20,7 +20,7 @@ class LogisticsEntryScreen extends StatelessWidget {
         SizedBox(height: size.height / 30),
         Row(
           children: [
-            UploadNumberImageAndNameOfDriverShipment(shipmentId: 1),
+           // UploadNumberImageAndNameOfDriverShipment(shipmentId: 1),
             SizedBox(width: size.width / 60),
             VolumetricWeightCalculation(),
           ],

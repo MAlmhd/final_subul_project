@@ -17,6 +17,8 @@ class UpdateShipmentForDeliveryCubit
     required int idDelivery,
     required int actualParcelsCount,
     required int idShipment,
+    required int flightId,
+    
   }) async {
     emit(UpdateShipmentForDeliveryLoading());
     UpdateShipmentForDeliveryParams updateShipmentForDeliveryParams =
@@ -24,7 +26,7 @@ class UpdateShipmentForDeliveryCubit
           idDelivery: idDelivery,
           idShipment: idShipment,
           actualParcelsCount: actualParcelsCount,
-          photo: photo,
+          photo: photo, flightId: flightId,
         );
     var data = await updateShipmentForDeliveryUseCase.call(
       updateShipmentForDeliveryParams,

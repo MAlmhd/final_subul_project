@@ -12,6 +12,7 @@ abstract class UpdateShipmentForDeliveryRemoteDataSource {
     required int idDelivery,
     required int actualParcelsCount,
     required int idShipment,
+    required int flightId,
   });
 }
 
@@ -27,6 +28,7 @@ class UpdateShipmentForDeliveryRemoteDataSourceImpl
     required int idDelivery,
     required int actualParcelsCount,
     required int idShipment,
+    required int flightId,
   }) async {
     final token = await sl.get<AuthLocalDataSource>().getToken();
     final photoOfShipment = MultipartFile.fromBytes(
@@ -38,6 +40,7 @@ class UpdateShipmentForDeliveryRemoteDataSourceImpl
       'actual_parcels_count': actualParcelsCount,
       'delivery_staff_id': idDelivery,
       'shipment_photo': photoOfShipment,
+      'flight_id':flightId
     });
 
     var response = await _apiService.post(

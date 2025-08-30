@@ -443,19 +443,19 @@ class _InvoiceDetailsPageState extends State<InvoiceDetailsPage> {
                                                 suffix: 'كغ',
                                                 color: AppColors.brightBlue,
                                               ),
-                                              _MetricChip(
-                                                icon: Icons.attach_money,
-                                                label: 'الإجمالي',
-                                                value: _shortMoney(
-                                                  state.entity.data.grandTotal,
-                                                  state
-                                                      .entity
-                                                      .data
-                                                      .invoiceDetails
-                                                      .currency,
-                                                ),
-                                                color: AppColors.goldenYellow,
-                                              ),
+                                              // _MetricChip(
+                                              //   icon: Icons.attach_money,
+                                              //   label: 'الإجمالي',
+                                              //   value: _shortMoney(
+                                              //     state.entity.data.grandTotal,
+                                              //     state
+                                              //         .entity
+                                              //         .data
+                                              //         .invoiceDetails
+                                              //         .currency,
+                                              //   ),
+                                              //   color: AppColors.goldenYellow,
+                                              // ),
                                             ],
                                           ),
 

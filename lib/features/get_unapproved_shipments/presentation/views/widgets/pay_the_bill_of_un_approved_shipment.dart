@@ -1,4 +1,5 @@
 import 'package:final_subul_project/core/utils/functions/show_snack_bar.dart';
+import 'package:final_subul_project/features/get_unapproved_shipments/domain/entities/un_approved_shipment_entity/un_approved_shipments_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,20 +11,19 @@ import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:final_subul_project/core/theming/app_colors.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
 import 'package:final_subul_project/core/widgets/custom_progress_indicator.dart';
-import 'package:final_subul_project/features/track_shipments_home/domain/entities/approved_shipment_entity/approved_shipment_entity.dart';
 import 'package:final_subul_project/features/track_shipments_home/domain/use_case/create_invoice_use_case/create_invoice_use_case.dart';
 import 'package:final_subul_project/features/track_shipments_home/presentation/manager/create_invoice_cubit/create_invoice_cubit.dart';
 import 'package:final_subul_project/features/track_shipments_home/presentation/views/widgets/square_price.dart';
 
-class PayTheBill extends StatefulWidget {
-  const PayTheBill({super.key, this.approvedShipmentEntity});
-  final ApprovedShipmentEntity? approvedShipmentEntity;
+class PayTheBillOfUnApprovedShipment extends StatefulWidget {
+  const PayTheBillOfUnApprovedShipment({super.key, this.unApprovedShipmentsEntity});
+  final UnApprovedShipmentsEntity? unApprovedShipmentsEntity;
 
   @override
-  State<PayTheBill> createState() => _PayTheBillState();
+  State<PayTheBillOfUnApprovedShipment> createState() => _PayTheBillOfUnApprovedShipmentState();
 }
 
-class _PayTheBillState extends State<PayTheBill> {
+class _PayTheBillOfUnApprovedShipmentState extends State<PayTheBillOfUnApprovedShipment> {
   late DateTime date; // تاريخ اليوم تلقائيًا
   final TextEditingController priceController = TextEditingController();
   int selectedPrice = 100;
@@ -41,7 +41,7 @@ class _PayTheBillState extends State<PayTheBill> {
   }
 
   bool get _showPriceSection {
-    final t = widget.approvedShipmentEntity?.typeOfShipment;
+    final t = widget.unApprovedShipmentsEntity?.typeOfShipment;
     return t == 'ship_pay' || t == 'pay_only';
   }
 
@@ -193,8 +193,8 @@ class _PayTheBillState extends State<PayTheBill> {
                               final formattedDate = _formatYMD(date);
 
                               context.read<CreateInvoiceCubit>().createInvoice(
-                                customerId: widget.approvedShipmentEntity!.idOfCustomer,
-                                shipmentId: widget.approvedShipmentEntity!.idOfShipment,
+                                customerId: widget.unApprovedShipmentsEntity!.idOfCustomer,
+                                shipmentId: widget.unApprovedShipmentsEntity!.idOfShipment,
                                 amount: _showPriceSection ? priceDecimal : 0.0,
                                 includesTax: false,
                                 payableAt: formattedDate, // تاريخ اليوم

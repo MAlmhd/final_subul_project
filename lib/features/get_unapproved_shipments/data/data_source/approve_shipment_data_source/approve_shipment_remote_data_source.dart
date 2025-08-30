@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:final_subul_project/core/data/auth_local_data_source.dart';
 import 'package:final_subul_project/core/utils/api_service.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
@@ -16,10 +18,15 @@ class ApproveShipmentRemoteDataSourceImpl
   @override
   Future<ResponseOfApproveShipmentEntity> approve({required int id}) async {
     final token = await sl.get<AuthLocalDataSource>().getToken();
+    log("token : $token");
+    log("id : $id");
+
     var response = await _apiService.post(
       endPoint: 'approve/shipment/$id',
       headers: {'Authorization': 'Bearer $token'},
     );
+       log("id : $response");
+
 
     ResponseOfApproveShipmentEntity entity =
         ResponseOfApproveShipmentModel.fromJson(response);

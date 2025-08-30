@@ -1,4 +1,3 @@
-import 'dart:developer' as dev; // لطباعة منظّمة مع اسم ووقت
 import 'package:dio/dio.dart';
 import 'package:final_subul_project/core/data/auth_local_data_source.dart';
 import 'package:final_subul_project/core/utils/api_service.dart';
@@ -20,8 +19,10 @@ abstract class CreateShipmentRemoteDataSource {
   });
 }
 
-class CreateShipmentRemoteDataSourceImpl implements CreateShipmentRemoteDataSource {
+class CreateShipmentRemoteDataSourceImpl
+    implements CreateShipmentRemoteDataSource {
   final ApiService _apiService;
+
   CreateShipmentRemoteDataSourceImpl(this._apiService);
 
   @override
@@ -35,36 +36,30 @@ class CreateShipmentRemoteDataSourceImpl implements CreateShipmentRemoteDataSour
     required int destenationCountryId,
     required XFile invoiceFile,
   }) async {
+    // 1) اجلب التوكن
     final token = await sl.get<AuthLocalDataSource>().getToken();
 
-    // ── LOG: مدخلات الدالة
-    dev.log('[CreateShipment] type=$type, customer_id=$customerId, '
-        'declared_parcels_count=$declaredParcelsCount, origin=$originCountryId, dest=$destenationCountryId',
-        name: 'CreateShipment');
-    dev.log('[CreateShipment] suppliers=${supplierIds.join(', ')}', name: 'CreateShipment');
-    dev.log('[CreateShipment] invoice_file name=${invoiceFile.name}', name: 'CreateShipment');
+    // 2) جهّز الـ FormData بنفس مفاتيح Postman
+    final formData = FormData();
 
-    final form = FormData();
+    formData.fields.addAll([
+      MapEntry('type', type),
+      MapEntry('customer_id', customerId.toString()),
+      MapEntry('origin_country_id', originCountryId.toString()),
+      MapEntry('destination_country_id', destenationCountryId.toString()),
+      MapEntry('declared_parcels_count', declaredParcelsCount),
+      MapEntry('notes', notes),
+    ]);
 
-    // الحقول العادية
-    form.fields
-      ..add(MapEntry('type', type))
-      ..add(MapEntry('customer_id', customerId.toString()))
-      ..add(MapEntry('declared_parcels_count', declaredParcelsCount))
-      ..add(MapEntry('notes', notes))
-      ..add(MapEntry('origin_country_id', originCountryId.toString()))
-      ..add(MapEntry('destination_country_id', destenationCountryId.toString()));
+    // supplier_ids[0], supplier_ids[1], ...
+    for (int i = 0; i < supplierIds.length; i++) {
+      formData.fields.add(
+        MapEntry('supplier_ids[$i]', supplierIds[i].toString()),
+      );
+    }
 
-    // ✅ الصيغة الصحيحة لمصفوفة لارافيل: supplier_ids[]
-final uniqueSuppliers = supplierIds.toSet().toList();
-for (final id in uniqueSuppliers) {
-  form.fields.add(MapEntry('supplier_ids[0]', id.toString()));
-}
-
-
-
-    // الملف
-    form.files.add(
+    // 3) أضف الملف
+    formData.files.add(
       MapEntry(
         'invoice_file',
         await MultipartFile.fromFile(
@@ -74,67 +69,18 @@ for (final id in uniqueSuppliers) {
       ),
     );
 
-   
+    // 4) نفّذ الطلب
+    final data = await _apiService.post(
+      endPoint: 'create/shipments',
+      data: formData,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+        // لا تضبط Content-Type هنا؛ Dio يضع boundary تلقائياً للـ multipart
+      },
+    );
 
-    try {
-      dev.log('[CreateShipment] POST -> create/shipments', name: 'CreateShipment');
-      final data = await _apiService.post(
-        endPoint: 'create/shipments',
-        data: form,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
-
-      // ── LOG: الاستجابة
-      dev.log('[CreateShipment] response: $data', name: 'CreateShipment');
-
-      return CreateShipmentModel.fromJson(data);
-    } on DioException catch (e) {
-      final status = e.response?.statusCode;
-      final url = e.requestOptions.uri.toString();
-      final msg = _extractServerMessage(e.response?.data);
-
-      // ── LOG: تفاصيل الخطأ
-      dev.log('[CreateShipment][DioError] status=$status method=${e.requestOptions.method} url=$url '
-          'type=${e.type} message=${e.message} body=${e.response?.data}',
-          name: 'CreateShipment', error: e, stackTrace: e.stackTrace);
-
-      throw Exception('فشل إنشاء الشحنة (${status ?? '500'}): '
-          '${msg.isNotEmpty ? msg : (e.message ?? 'Server Error')}');
-    } catch (e, st) {
-      dev.log('[CreateShipment][UnknownError] $e', name: 'CreateShipment', error: e, stackTrace: st);
-      throw Exception('حدث خطأ غير متوقع أثناء إنشاء الشحنة: $e');
-    }
+    // 5) حوّل الرد إلى الـ Entity
+    return CreateShipmentModel.fromJson(data);
   }
-}
-
-
-// ===== Helpers لاستخراج رسائل السيرفر (لارافيل) =====
-String _extractServerMessage(dynamic data) {
-  if (data == null) return '';
-  if (data is Map) {
-    final msg = (data['message'] ?? data['error'] ?? data['status_message'])?.toString();
-    final errs = _collectLaravelErrors(data['errors']);
-    if ((msg != null && msg.isNotEmpty) && errs.isNotEmpty) return '$msg | $errs';
-    if (msg != null && msg.isNotEmpty) return msg;
-    if (errs.isNotEmpty) return errs;
-  }
-  return data.toString();
-}
-
-String _collectLaravelErrors(dynamic errors) {
-  if (errors is Map) {
-    final out = <String>[];
-    errors.forEach((k, v) {
-      if (v is List) {
-        for (final item in v) out.add('$k: $item');
-      } else if (v != null) {
-        out.add('$k: $v');
-      }
-    });
-    return out.join(' | ');
-  }
-  return '';
 }

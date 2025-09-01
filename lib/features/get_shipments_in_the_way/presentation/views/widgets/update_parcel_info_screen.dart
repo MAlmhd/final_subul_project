@@ -41,10 +41,10 @@ class _UpdateParcelInfoScreenState extends State<UpdateParcelInfoScreen> {
   Uint8List? _imageBytes;
 
   final _statusOptions = const <String>[
-    'pickup',
-    'scheduled',
+   // 'pickup',
+   // 'scheduled',
     'deliverable',
-    'stored',
+   // 'stored',
   ];
 
   @override

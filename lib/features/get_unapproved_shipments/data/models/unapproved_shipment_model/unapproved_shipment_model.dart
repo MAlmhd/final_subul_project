@@ -7,7 +7,7 @@ class UnapprovedShipmentModel extends UnApprovedShipmentsEntity {
   final int customerId;
   final String? customerName;
   final String? status;
-  final int declaredParcelsCount;
+  final int? declaredParcelsCount;
   final DateTime createdAt;
 
   // ✅ جديد
@@ -20,7 +20,7 @@ class UnapprovedShipmentModel extends UnApprovedShipmentsEntity {
     required this.customerId,
     required this.customerName,
     required this.status,
-    required this.declaredParcelsCount,
+     this.declaredParcelsCount,
     required this.createdAt,
     this.invoiceFile2,
   }) : super(
@@ -43,7 +43,7 @@ class UnapprovedShipmentModel extends UnApprovedShipmentsEntity {
       customerId: json['customer_id'] as int,
       customerName: json['customer_name'] as String?,
       status: json['status'] as String?,
-      declaredParcelsCount: json['declared_parcels_count'] as int,
+      declaredParcelsCount: json['declared_parcels_count'],
       createdAt: DateTime.parse(json['created_at'] as String),
       invoiceFile2: json['invoice_file'] as String?, // ✅ قراءة الرابط
     );

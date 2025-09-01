@@ -23,5 +23,6 @@ static const String trackShipmentsHome = '/trackShipmentsHome';
   static const String shipmentDetailsCardScrren = '/shipmentDetailsCardScrren';
   static const String shipmentDetailsPage = '/shipmentDetailsPage';
   static const String payTheBillOfUnApprovedShipment = '/payTheBillOfUnApprovedShipment';
+  static const String signInScreen = '/signInScreen';
   
 }

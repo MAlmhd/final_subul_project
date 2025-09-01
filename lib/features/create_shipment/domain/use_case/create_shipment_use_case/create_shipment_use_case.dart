@@ -31,7 +31,7 @@ class CreateShipmentParams {
   final String type;
   final int customerId;
   final List<int> supplierIds;
-  final String declaredParcelsCount;
+  final String? declaredParcelsCount;
   final String notes;
   final int originCountryId;
   final int destenationCountryId;
@@ -41,7 +41,7 @@ class CreateShipmentParams {
     required this.type,
     required this.customerId,
     required this.supplierIds,
-    required this.declaredParcelsCount,
+     this.declaredParcelsCount,
     required this.notes,
     required this.originCountryId,
     required this.destenationCountryId,

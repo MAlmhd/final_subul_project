@@ -31,6 +31,8 @@ class AddShipmentForm extends StatefulWidget {
 }
 
 class _AddShipmentFormState extends State<AddShipmentForm> {
+  bool get isPayOnly => selectedType == 'pay_only';
+
   final _formKey = GlobalKey<FormState>();
 
   UserEntity? selectedCustomer;
@@ -179,7 +181,15 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                   GenericDropdownField<String>(
                     items: typeOfShipments,
                     selectedItem: selectedType,
-                    onChanged: (value) => setState(() => selectedType = value),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedType = value;
+                        if (isPayOnly) {
+                          // امسح عدد الطرود عند الدفع فقط
+                          declaredParcelsCountController.clear();
+                        }
+                      });
+                    },
                     itemAsString: (c) => c,
                     hintText: 'نوع الشحنة',
                     svgIcon: SvgPicture.asset(
@@ -241,21 +251,26 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                   SizedBox(height: 20.h),
 
                   // ===== عدد الطرود =====
-                  CustomInputField(
-                    controller: declaredParcelsCountController,
-                    hintText: 'عدد الطرود',
-                    svgPicture: SvgPicture.asset(
-                      AssetsData.boxNotFilled,
-                      height: 15.h,
+                  if (!isPayOnly) ...[
+                    CustomInputField(
+                      controller: declaredParcelsCountController,
+                      hintText: 'عدد الطرود',
+                      svgPicture: SvgPicture.asset(
+                        AssetsData.boxNotFilled,
+                        height: 15.h,
+                      ),
+                      validator: (value) {
+                        if (isPayOnly) return null; // لا نتحقق عند الدفع فقط
+                        if (value == null || value.isEmpty)
+                          return 'يرجى إدخال عدد الطرود';
+                        // (اختياري) تحقق أنه رقم صحيح
+                        final n = int.tryParse(value);
+                        if (n == null || n < 0) return 'يرجى إدخال رقم صحيح';
+                        return null;
+                      },
                     ),
-                    validator:
-                        (value) =>
-                            (value == null || value.isEmpty)
-                                ? 'يرجى إدخال عدد الطرود'
-                                : null,
-                  ),
-
-                  SizedBox(height: 20.h),
+                    SizedBox(height: 20.h),
+                  ],
 
                   // ===== ملاحظات =====
                   CustomInputField(
@@ -269,7 +284,7 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
 
                   SizedBox(height: 20.h),
                   SizedBox(
-                    width : 15.w,
+                    width: 15.w,
                     child: UploadImage(
                       label: 'أدخل صورة الفاتورة',
                       onTap: () => pickImage(),
@@ -312,7 +327,10 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                                     type: selectedType!,
                                     customerId: selectedCustomer!.id,
                                     declaredParcelsCount:
-                                        declaredParcelsCountController.text,
+                                        isPayOnly
+                                            ? null
+                                            : declaredParcelsCountController
+                                                .text,
                                     notes: notesController.text,
                                     destenationCountryId:
                                         selectedDestinitionCountry!.id,
@@ -325,6 +343,7 @@ class _AddShipmentFormState extends State<AddShipmentForm> {
                                   );
                             }
                           },
+
                           child:
                               state is CreateShipmentLoading
                                   ? const CustomProgressIndicator()

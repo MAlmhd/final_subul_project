@@ -89,7 +89,7 @@ class CustomTrackShipmentItem extends StatelessWidget {
                 SizedBox(width: size.width / 40),
                 Flexible(
                   child: Tooltip(
-                    message: 'رقم التتبع',
+                    message: shipmentInProcessEntity.trackingNumber,
                     child: Text(
                       shipmentInProcessEntity.trackingNumber,
                       softWrap: true,

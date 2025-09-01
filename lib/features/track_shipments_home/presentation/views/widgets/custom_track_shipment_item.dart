@@ -1,3 +1,4 @@
+import 'package:final_subul_project/features/track_shipments_home/presentation/views/widgets/shipment_details_card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,95 +17,110 @@ class CustomTrackShipmentItem extends StatelessWidget {
     required this.approvedShipmentEntity,
   });
   final ApprovedShipmentEntity approvedShipmentEntity;
- 
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return SizedBox(
-      width: 290.w,
-      child: Row(
-        children: [
-          Container(
-            width: size.width / 1.5,
-            height: size.height / 11,
-            decoration: BoxDecoration(
-              color: AppColors.lightGray2,
-              borderRadius: BorderRadius.circular(cornerRadius),
-            ),
-            child: Row(
-              children: [
-                SizedBox(width: size.width / 45),
-                Row(
-                  children: [
-                    SvgPicture.asset(AssetsData.money, width: 8.w),
-                    SizedBox(width: size.width / 70),
-                    Text(
-                      approvedShipmentEntity.typeOfShipment ,
-                      style: Styles.textStyle5Sp,
-                    ),
-                  ],
-                ),
-                SizedBox(width: size.width / 20),
-                Container(
-                  width: 30.w,
-                  height: 35.h,
-                  decoration: BoxDecoration(
-                    color: approvedShipmentEntity.statusOfShipment == null ? Colors.red : AppColors.green,
-                    borderRadius: BorderRadius.circular(cornerRadius),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => ShipmentDetailsCard(data: approvedShipmentEntity),
+          ),
+        );
+      },
+      child: SizedBox(
+        width: 290.w,
+        child: Row(
+          children: [
+            Container(
+              width: size.width / 1.5,
+              height: size.height / 11,
+              decoration: BoxDecoration(
+                color: AppColors.lightGray2,
+                borderRadius: BorderRadius.circular(cornerRadius),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(width: size.width / 45),
+                  Row(
+                    children: [
+                      SvgPicture.asset(AssetsData.money, width: 8.w),
+                      SizedBox(width: size.width / 70),
+                      Text(
+                        approvedShipmentEntity.typeOfShipment,
+                        style: Styles.textStyle5Sp,
+                      ),
+                    ],
                   ),
-                  child: Center(
+                  SizedBox(width: size.width / 20),
+                  Container(
+                    width: 30.w,
+                    height: 35.h,
+                    decoration: BoxDecoration(
+                      color:
+                          approvedShipmentEntity.statusOfShipment == null
+                              ? Colors.red
+                              : AppColors.green,
+                      borderRadius: BorderRadius.circular(cornerRadius),
+                    ),
+                    child: Center(
+                      child: Text(
+                        approvedShipmentEntity.statusOfShipment ?? "Null",
+                        style: Styles.textStyle4Sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: size.width / 10),
+                  Text(
+                    approvedShipmentEntity.numberOfShipment.toString(),
+                    overflow: TextOverflow.visible,
+                    style: Styles.textStyle5Sp,
+                  ),
+                  SizedBox(width: size.width / 10),
+                  Flexible(
                     child: Text(
-                      approvedShipmentEntity.statusOfShipment ?? "Null",
-                      style: Styles.textStyle4Sp,
+                      approvedShipmentEntity.nameOfCustomer,
+                      style: Styles.textStyle5Sp,
+                      softWrap: true,
                     ),
                   ),
-                ),
-                SizedBox(width: size.width / 10),
-                Text(
-                  approvedShipmentEntity.numberOfShipment.toString(),
-                  overflow: TextOverflow.visible,
-                  style: Styles.textStyle5Sp,
-                ),
-                SizedBox(width: size.width / 10),
-                Flexible(
-                  child: Text(
-                    approvedShipmentEntity.nameOfCustomer,
-                    style: Styles.textStyle5Sp,
-                    softWrap: true,
+                  SizedBox(width: size.width / 40),
+                  Flexible(
+                    child: Tooltip(
+                      message:
+                          approvedShipmentEntity
+                              .trackingString, // النص الكامل يظهر هنا
+                      child: Text(
+                        approvedShipmentEntity.trackingString,
+                        softWrap: true,
+                        style: Styles.textStyle5Sp,
+                        overflow: TextOverflow.ellipsis, // يختصر بالـ ...
+                        maxLines: 1,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(width: size.width / 40),
-                Flexible(
-                  child: Text(
-                    approvedShipmentEntity.trackingString,
-                    softWrap: true,
-                    style: Styles.textStyle5Sp,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: size.width / 50),
+            SizedBox(width: size.width / 50),
 
-          TextButton(
-            onPressed: () {
-              context.pushNamed(
-                Routes.payTheBill,
-                arguments: approvedShipmentEntity,
-              );
-            },
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(AppColors.goldenYellow),
-            ),
-            child: Text(
-              'انشاء فاتورة',
-              style: Styles.textStyle4Sp.copyWith(color: Colors.black),
-            ),
-          ),
-        ],
+            // TextButton(
+            //   onPressed: () {
+            //
+            //   },
+            //   style: ButtonStyle(
+            //     backgroundColor: WidgetStateProperty.all(AppColors.goldenYellow),
+            //   ),
+            //   child: Text(
+            //     'انشاء فاتورة',
+            //     style: Styles.textStyle4Sp.copyWith(color: Colors.black),
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }

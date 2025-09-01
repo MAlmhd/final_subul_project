@@ -1,4 +1,7 @@
+import 'package:final_subul_project/core/data/auth_local_data_source.dart';
 import 'package:final_subul_project/core/helpers/assets_data.dart';
+import 'package:final_subul_project/core/helpers/extensions.dart';
+import 'package:final_subul_project/core/routing/routes.dart';
 import 'package:final_subul_project/core/theming/app_colors.dart';
 import 'package:final_subul_project/core/utils/service_locator.dart';
 import 'package:final_subul_project/core/widgets/custom_icon_of_side_bar.dart';
@@ -23,6 +26,7 @@ import 'package:final_subul_project/features/get_shipments_in_the_way/domain/use
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/manager/get_shipments_in_the_way_cubit/get_shipments_in_the_way_cubit.dart';
 import 'package:final_subul_project/features/get_shipments_in_the_way/presentation/views/get_shipments_in_the_way_screen.dart';
 import 'package:final_subul_project/features/home_view/presentation/views/widgets/animations.dart';
+import 'package:final_subul_project/features/warehouse_manager/manager/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,68 +63,148 @@ class _WarehouseManagerState extends State<WarehouseManager> {
           children: [
             Stack(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10.w, top: 40.h),
-                      child: TextLogo(),
-                    ),
-                    SizedBox(height: size.height / 30),
-                    Expanded(
-                      child: Container(
-                      
-                        decoration: BoxDecoration(
-                          color: AppColors.goldenYellow,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(120),
-                            topLeft: Radius.circular(10),
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          mainAxisSize: MainAxisSize.min,
+                BlocProvider(
+                  create: (context) => AuthCubit(sl<AuthLocalDataSource>()),
+                  child: Builder(
+                    builder:
+                        (context) => Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             SizedBox(height: 35.h),
-                            CustomIconOfSideBar(
-                              icon: Icons.add,
-                              color: AppColors.white,
-                              onTap: () {
-                                onButtonTap(1);
-                              },
-                              isSelected: selectedButtonIndex == 1,
+                            Padding(
+                              padding: EdgeInsets.only(left: 10.w, top: 40.h),
+                              child: TextLogo(),
                             ),
-                            SizedBox(height: 24.h),
-                            CustomIconOfSideBar(
-                              icon: Icons.local_shipping,
-                              color: AppColors.white,
-                              onTap: () {
-                                onButtonTap(2);
-                              },
-                              isSelected: selectedButtonIndex == 2,
-                            ),
-                            SizedBox(height: 24.h),
-                            CustomIconOfSideBar(
-                              image: AssetsData.boxShipmmentIcon,
-                              onTap: () {
-                                onButtonTap(3);
-                              },
-                              isSelected: selectedButtonIndex == 3,
-                            ),
-                            SizedBox(height: 24.h),
-                            CustomIconOfSideBar(
-                              image: AssetsData.outlinePurpleBox,
-                              onTap: () {
-                                onButtonTap(4);
-                              },
-                              isSelected: selectedButtonIndex == 4,
+                            SizedBox(height: size.height / 30),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.goldenYellow,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(120),
+                                    topLeft: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(height: 35.h),
+                                    CustomIconOfSideBar(
+                                      icon: Icons.add,
+                                      color: AppColors.white,
+                                      onTap: () {
+                                        onButtonTap(1);
+                                      },
+                                      isSelected: selectedButtonIndex == 1,
+                                    ),
+                                    SizedBox(height: 24.h),
+                                    CustomIconOfSideBar(
+                                      icon: Icons.local_shipping,
+                                      color: AppColors.white,
+                                      onTap: () {
+                                        onButtonTap(2);
+                                      },
+                                      isSelected: selectedButtonIndex == 2,
+                                    ),
+                                    SizedBox(height: 24.h),
+                                    CustomIconOfSideBar(
+                                      image: AssetsData.boxShipmmentIcon,
+                                      onTap: () {
+                                        onButtonTap(3);
+                                      },
+                                      isSelected: selectedButtonIndex == 3,
+                                    ),
+                                    SizedBox(height: 24.h),
+                                    CustomIconOfSideBar(
+                                      image: AssetsData.outlinePurpleBox,
+                                      onTap: () {
+                                        onButtonTap(4);
+                                      },
+                                      isSelected: selectedButtonIndex == 4,
+                                    ),
+                                    SizedBox(height: 24.h),
+                                    BlocListener<AuthCubit, AuthState>(
+                                      listener: (context, state) {
+                                        if (state is AuthLoggedOut) {
+                                          if (!context.mounted) return;
+                                          Navigator.of(
+                                            context,
+                                          ).pushNamedAndRemoveUntil(
+                                            Routes.signInScreen,
+                                            (route) => false,
+                                          );
+                                        }
+                                      },
+                                      child: Tooltip(
+                                        message: 'تسجيل الخروج',
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              bottom: 20,
+                                            ),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                context
+                                                    .read<AuthCubit>()
+                                                    .logout();
+                                              },
+                                              child: Container(
+                                                width: 50,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  gradient:
+                                                      const LinearGradient(
+                                                        colors: [
+                                                          AppColors.richPurple,
+                                                          AppColors
+                                                              .goldenYellow,
+                                                          AppColors
+                                                              .vibrantOrange,
+                                                          AppColors.deepPurple,
+                                                        ],
+                                                        stops: [
+                                                          0.25,
+                                                          0.5,
+                                                          0.75,
+                                                          1.0,
+                                                        ],
+                                                        begin:
+                                                            Alignment
+                                                                .centerLeft,
+                                                        end:
+                                                            Alignment
+                                                                .centerRight,
+                                                      ),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black26,
+                                                      blurRadius: 6,
+                                                      offset: Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: const Icon(
+                                                  Icons.logout,
+                                                  color: Colors.white,
+                                                  size: 28,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -165,9 +249,17 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                         (context) => GetShipmentInProccessCubit(
                           sl.get<GetShipmentsInProcessUseCase>(),
                         )..getShipments(),
-                    child: Builder(builder:(context) => RefetchOnShow(isVisible:selectedButtonIndex == 1,
-                    onShow: () => context.read<GetShipmentInProccessCubit>()..getShipments(),
-                    child: ShowShipmentsInProcessScreen())),
+                    child: Builder(
+                      builder:
+                          (context) => RefetchOnShow(
+                            isVisible: selectedButtonIndex == 1,
+                            onShow:
+                                () =>
+                                    context.read<GetShipmentInProccessCubit>()
+                                      ..getShipments(),
+                            child: ShowShipmentsInProcessScreen(),
+                          ),
+                    ),
                   ),
                   BlocProvider(
                     create:
@@ -175,10 +267,15 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                           sl.get<GetShipmentsInTheWayUseCase>(),
                         )..getShipmentsInTheWay(),
                     child: Builder(
-                     builder:
-                          (context) => RefetchOnShow(isVisible:selectedButtonIndex == 2,
-                      onShow: ()=> context.read<GetShipmentsInTheWayCubit>()..getShipmentsInTheWay(),
-                      child: GetShipmentsInTheWayScreen()),
+                      builder:
+                          (context) => RefetchOnShow(
+                            isVisible: selectedButtonIndex == 2,
+                            onShow:
+                                () =>
+                                    context.read<GetShipmentsInTheWayCubit>()
+                                      ..getShipmentsInTheWay(),
+                            child: GetShipmentsInTheWayScreen(),
+                          ),
                     ),
                   ),
                   BlocProvider(
@@ -199,7 +296,7 @@ class _WarehouseManagerState extends State<WarehouseManager> {
                           ),
                     ),
                   ),
-      
+
                   // BlocProvider(
                   //   create:
                   //       (context) =>

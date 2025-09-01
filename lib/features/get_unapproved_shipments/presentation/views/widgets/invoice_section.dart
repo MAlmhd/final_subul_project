@@ -65,17 +65,20 @@ class InvoiceSectionState extends State<InvoiceSection> {
     if (!_hasUrl || _isPdf) return;
     showDialog(
       context: context,
-      builder: (_) => Dialog(
-        insetPadding: const EdgeInsets.all(16),
-        child: InteractiveViewer(
-          clipBehavior: Clip.none,
-          child: Image.network(
-            widget.url!, // بدون أي بارامترات
-            fit: BoxFit.contain,
-            errorBuilder: (_, __, ___) => const _InvoiceError(title: 'تعذّر فتح الصورة'),
+      builder:
+          (_) => Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            child: InteractiveViewer(
+              clipBehavior: Clip.none,
+              child: Image.network(
+                widget.url!, // بدون أي بارامترات
+                fit: BoxFit.contain,
+                errorBuilder:
+                    (_, __, ___) =>
+                        const _InvoiceError(title: 'تعذّر فتح الصورة'),
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -109,7 +112,10 @@ class InvoiceSectionState extends State<InvoiceSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('ملف الفاتورة', style: TextStyle(fontWeight: FontWeight.w700)),
+        const Text(
+          'ملف الفاتورة',
+          style: TextStyle(fontWeight: FontWeight.w700),
+        ),
         const SizedBox(height: 8),
         InkWell(
           onTap: _openFullscreen,
@@ -120,7 +126,9 @@ class InvoiceSectionState extends State<InvoiceSection> {
               aspectRatio: 16 / 9,
               child: Image.network(
                 widget.url!, // 👈 بدون ?r=
-                key: ValueKey('invoice_${widget.url}_${_retry}'), // يجبر إعادة التحميل
+                key: ValueKey(
+                  'invoice_${widget.url}_${_retry}',
+                ), // يجبر إعادة التحميل
                 fit: BoxFit.cover,
                 // عندما يصل أول frame نعتبرها اكتملت ونلغي الـ timeout
                 frameBuilder: (context, child, frame, wasSync) {
@@ -161,15 +169,21 @@ class InvoiceSectionState extends State<InvoiceSection> {
           alignment: Alignment.centerLeft,
           child: TextButton.icon(
             onPressed: _openInBrowser,
-            icon: const Icon(Icons.open_in_new, size: 18, color: AppColors.deepPurple),
-            label: const Text('فتح في المتصفح', style: TextStyle(color: AppColors.deepPurple)),
+            icon: const Icon(
+              Icons.open_in_new,
+              size: 18,
+              color: AppColors.deepPurple,
+            ),
+            label: const Text(
+              'فتح في المتصفح',
+              style: TextStyle(color: AppColors.deepPurple),
+            ),
           ),
         ),
       ],
     );
   }
 }
-
 
 class _PdfCard extends StatelessWidget {
   const _PdfCard({required this.url, required this.onOpen});
@@ -190,7 +204,8 @@ class _PdfCard extends StatelessWidget {
           const Icon(Icons.picture_as_pdf, color: AppColors.vibrantOrange),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(url,
+            child: Text(
+              url,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textDirection: TextDirection.ltr,
@@ -204,7 +219,9 @@ class _PdfCard extends StatelessWidget {
               backgroundColor: AppColors.deepPurple,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               elevation: 0,
             ),
             child: const Text('فتح'),
@@ -229,9 +246,16 @@ class _InvoiceError extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.broken_image_outlined, size: 36, color: AppColors.mediumGray),
+            const Icon(
+              Icons.broken_image_outlined,
+              size: 36,
+              color: AppColors.mediumGray,
+            ),
             const SizedBox(height: 8),
-            Text(title ?? 'تعذّر تحميل الصورة', style: const TextStyle(color: AppColors.gunmetal)),
+            Text(
+              title ?? 'تعذّر تحميل الصورة',
+              style: const TextStyle(color: AppColors.gunmetal),
+            ),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
@@ -242,7 +266,9 @@ class _InvoiceError extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.deepPurple,
                       side: const BorderSide(color: AppColors.deepPurple),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                     child: const Text('إعادة المحاولة'),
                   ),
@@ -282,9 +308,18 @@ class _InvoiceEmpty extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
                 if (subtitle != null)
-                  Text(subtitle!, style: const TextStyle(color: AppColors.mediumGray, fontSize: 12)),
+                  Text(
+                    subtitle!,
+                    style: const TextStyle(
+                      color: AppColors.mediumGray,
+                      fontSize: 12,
+                    ),
+                  ),
               ],
             ),
           ),

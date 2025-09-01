@@ -11,7 +11,7 @@ abstract class CreateShipmentRemoteDataSource {
     required String type,
     required int customerId,
     required List<int> supplierIds,
-    required String declaredParcelsCount,
+    required String? declaredParcelsCount,
     required String notes,
     required int originCountryId,
     required int destenationCountryId,
@@ -30,7 +30,7 @@ class CreateShipmentRemoteDataSourceImpl
     required String type,
     required int customerId,
     required List<int> supplierIds,
-    required String declaredParcelsCount,
+    required String? declaredParcelsCount,
     required String notes,
     required int originCountryId,
     required int destenationCountryId,
@@ -47,9 +47,15 @@ class CreateShipmentRemoteDataSourceImpl
       MapEntry('customer_id', customerId.toString()),
       MapEntry('origin_country_id', originCountryId.toString()),
       MapEntry('destination_country_id', destenationCountryId.toString()),
-      MapEntry('declared_parcels_count', declaredParcelsCount),
+    //  MapEntry('declared_parcels_count', declaredParcelsCount),
       MapEntry('notes', notes),
     ]);
+
+     if (declaredParcelsCount != null) {
+    formData.fields.add(
+      MapEntry('declared_parcels_count', declaredParcelsCount),
+    );
+  }
 
     // supplier_ids[0], supplier_ids[1], ...
     for (int i = 0; i < supplierIds.length; i++) {

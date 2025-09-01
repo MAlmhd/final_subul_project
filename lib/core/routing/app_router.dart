@@ -12,6 +12,7 @@ import 'package:final_subul_project/features/get_unapproved_shipments/domain/ent
 import 'package:final_subul_project/features/get_unapproved_shipments/presentation/views/widgets/pay_the_bill_of_un_approved_shipment.dart';
 import 'package:final_subul_project/features/get_unapproved_shipments/presentation/views/widgets/shipment_details_card.dart';
 import 'package:final_subul_project/features/get_unapproved_shipments/presentation/views/widgets/shipment_details_page.dart';
+import 'package:final_subul_project/features/sign_in/presentation/views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:final_subul_project/core/routing/routes.dart';
@@ -80,7 +81,10 @@ class AppRouter {
         final numberOfParcelsCreated = args["numberOfParcels"] as int;
         return MaterialPageRoute(
           builder:
-              (_) => UploadNumberImageAndNameOfDriverShipment(shipmentId: id ,createdParcelsNumber:numberOfParcelsCreated ,),
+              (_) => UploadNumberImageAndNameOfDriverShipment(
+                shipmentId: id,
+                createdParcelsNumber: numberOfParcelsCreated,
+              ),
         );
       case Routes.editCountry:
         final id = arguments as int;
@@ -288,8 +292,13 @@ class AppRouter {
         final UnApprovedShipmentsEntity unApprovedShipmentsEntity =
             arguments as UnApprovedShipmentsEntity;
         return MaterialPageRoute(
-          builder: (context) => PayTheBillOfUnApprovedShipment(unApprovedShipmentsEntity: unApprovedShipmentsEntity,),
+          builder:
+              (context) => PayTheBillOfUnApprovedShipment(
+                unApprovedShipmentsEntity: unApprovedShipmentsEntity,
+              ),
         );
+      case Routes.signInScreen:
+        return MaterialPageRoute(builder: (context) => SignInScreen());
 
       default:
         return null;

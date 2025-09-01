@@ -32,15 +32,15 @@ class CreateInvoiceRemoteDataSourceImpl
     required String payableAt,
   }) async {
     final token = await sl.get<AuthLocalDataSource>().getToken();
-
+log('[CreateInvoice][REQ] customer_id=$customerId, shipment_id=$shipmentId, amount=$amount, includes_tax=$includesTax, payable_at=$payableAt');
     var data = await _apiService.post(
       endPoint: 'create/invoice',
-      headers: {'Authorization': 'Bearer $token'},
+      headers: {'Authorization': 'Bearer $token','Accept': 'application/json',},
       data: {
         'customer_id': customerId,
         'shipment_id': shipmentId,
         'amount': amount,
-        'includes_tax': includesTax,
+        'includes_tax': true,
         'payable_at': payableAt,
       },
     );

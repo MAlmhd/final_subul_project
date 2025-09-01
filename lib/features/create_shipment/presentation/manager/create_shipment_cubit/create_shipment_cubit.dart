@@ -15,7 +15,7 @@ class CreateShipmentCubit extends Cubit<CreateShipmentState> {
     required String type,
     required int customerId,
    required List<int> supplierIds,
-    required String declaredParcelsCount,
+     String? declaredParcelsCount,
     required String notes,
     required int originCountryId,
     required int destenationCountryId,

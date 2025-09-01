@@ -94,11 +94,14 @@ class _CustomShipmentItemState extends State<CustomShipmentItem> {
                     ),
                     SizedBox(width: 10.w),
                     Expanded(
-                      child: Text(
-                        widget.unApprovedShipment.trackingString,
-                        style: Styles.textStyle5Sp,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      child: Tooltip(
+                        message:widget.unApprovedShipment.trackingString ,
+                        child: Text(
+                          widget.unApprovedShipment.trackingString,
+                          style: Styles.textStyle5Sp,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     SizedBox(width: 10.w),

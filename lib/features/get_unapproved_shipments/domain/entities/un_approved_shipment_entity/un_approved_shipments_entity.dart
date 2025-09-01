@@ -20,7 +20,7 @@ class UnApprovedShipmentsEntity  {
   final String? statusOfShipment;
 
  
-  final int numberOfShipments;
+  final int? numberOfShipments;
 
   final String? invoiceFile;
 
